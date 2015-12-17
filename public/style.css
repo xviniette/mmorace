@@ -1,0 +1,82 @@
+body{
+	background-color: #191919;
+  font-size: 20px;
+  font-family: Arial;
+}
+
+#signin
+{
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 400px;
+  height: 300px;
+  padding: 5px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#chooseRoom
+{
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  height: 150px;
+  padding: 10px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  text-align: center;
+  display: none;
+}
+
+#death
+{
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 400px;
+  height: 250px;
+  padding: 10px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  text-align: center;
+  display: none;
+}
+
+#canvas{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+#killLogs{
+	position: fixed;
+	left:10px;
+	top:10px;
+  color:white;
+}
+
+#leaderboard{
+	position: fixed;
+	right:10px;
+	top:10px;
+  color:white;
+}
+
+#myScore{
+	position: fixed;
+	left:10px;
+	bottom:10px;
+  color:white;
+}
