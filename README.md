@@ -1,1 +1,3 @@
-# mmorace 
+# MMORace
+
+Jeu de course multijoueur 
