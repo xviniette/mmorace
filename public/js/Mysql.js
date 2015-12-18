@@ -66,12 +66,25 @@ Mysql.prototype.getRanking = function(type, desc, min, max, callback){
 	});
 }
 
+//Race
+
+Mysql.prototype.addRace = function(mapid, callback){
+	var data = {
+		id_m:mapid,
+		date:Math.floor(Date.now()/1000)
+	}
+	this.db.query("INSERT INTO races SET ?", data, function(e, r, f){
+		callback(r.insertId);
+	});
+}
+
+
 //TEMPS
 
-Mysql.prototype.addTemps = function(userid, mapid, time, callback){
+Mysql.prototype.addTemps = function(userid, raceid, time, callback){
 	var data = {
 		id_u:userid,
-		id_m:mapid,
+		id_r:raceid,
 		timestamp:time,
 		date:Math.floor(Date.now()/1000)
 	}

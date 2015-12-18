@@ -66,7 +66,7 @@ app.get( '/mapRank/:id/:min/:max' , function( req, res) {
 
 app.get( '/*' , function( req, res, next ) {
 	var file = req.params[0];
-	res.sendFile( __dirname + '/' + file );
+	res.sendFile( __dirname + '/public/' + file );
 });
 
 var unRoom = new UniqueNumber(1);

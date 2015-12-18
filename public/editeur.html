@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='UTF-8' />
+	<title>MORACE</title>
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+	<input type="number" id="w" value="1000"><input type="number" id="h" value="1000"><br/>
+	<input type="checkbox" id="fill">fill<br/>
+	<canvas id="canvas" width="1000" height="1000"></canvas>
+	<textarea id="infos" rows="40" cols="100"></textarea>
+	<div id="res"></div>
+
+	<script src="js/jquery.js"></script>
+	<script src="mustache.min.js"></script>
+	<script src="js/Map.js"></script>
+	<script>
+	var map = new Map();
+
+	$("#infos").change(function(e){
+		map.init(JSON.parse($(this).val()));
+		displayMap();
+	});
+
+	$("#canvas").click(function(e){
+		var x = Math.floor((e.pageX - this.offsetLeft));
+		var y = Math.floor((e.pageY - this.offsetTop));
+		var i = map.track.length - 1;
+		map.track[i].push([x, y]);
+		displayMap();
+	});
+
+	var degToRad = function(deg){
+		return deg * Math.PI / 180;
+	}
+
+	var displayMap = function(){
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+		ctx.clearRect(0, 0, canvas.width,canvas.height);
+
+		var filled =  $('#fill').is(':checked');
+		
+		//Piste
+		ctx.fillStyle = "red";
+		for(var i in map.track){
+			ctx.beginPath();
+			for(var j in map.track[i]){
+				if(j == 0){
+					ctx.moveTo(map.track[i][j][0], map.track[i][j][1]);
+				}else{
+					ctx.lineTo(map.track[i][j][0], map.track[i][j][1]);
+				}	
+			}
+			if(filled){
+				ctx.fill();
+			}else{
+				ctx.stroke();
+			}
+		}
+
+		//Checkpoints
+		for(var i in map.checkpoints){
+			var c = map.checkpoints[i];
+			ctx.strokeStyle = "blue";
+			ctx.beginPath();
+			ctx.arc(c.x,c.y,c.r,0, 2*Math.PI);
+			ctx.stroke();
+		}
+
+		//finish
+		if(map.finish){
+			ctx.strokeStyle = "green";
+			ctx.strokeRect(map.finish.x,map.finish.y,map.finish.w, map.finish.h);
+			ctx.stroke();
+		}
+
+		
+		//Joueur
+		if(map.start){
+			if(map.start.x && map.start.y){
+				ctx.save();
+				ctx.translate(map.start.x, map.start.y); 
+				ctx.rotate(degToRad(map.start.rotation)); 
+
+				var largeur = 40;
+				var longueur = 20;
+				ctx.fillStyle = "black";
+				ctx.fillRect(-largeur/2, -longueur/2, largeur, longueur);
+				ctx.fillStyle = "red";
+				var largD = largeur/4;
+				var longD = longueur;
+				ctx.fillRect(largeur/2-largD, -longueur/2, largD, longueur);
+
+				ctx.restore();
+			}
+		}
+
+		$("#infos").val(JSON.stringify(map.getInfos()));
+		$("#res").text(JSON.stringify(map.getInfos()));
+	}
+
+	var resizeMap = function(w, h){
+		$("#canvas").attr("width", w+"px");
+		$("#canvas").attr("height", h+"px");
+	}
+
+	$("#w").change(function(e){
+		resizeMap($("#w").val(), $("#h").val());
+		displayMap();
+	});
+
+	$("#fill").change(function(e){
+		displayMap();
+	});
+
+	$("#h").change(function(e){
+		resizeMap($("#w").val(), $("#h").val());
+		displayMap();
+	});
+
+
+	displayMap();
+	</script>
+</body>
+</html>

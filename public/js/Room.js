@@ -111,25 +111,23 @@ Room.prototype.endRace = function(){
 		}
 	}
 
-	for(var i in this.playingPlayers){
-		if(this.playingPlayers[i].registered){
-			//Si inscrit
-			this.playingPlayers[i].played++;
-			if(this.playingPlayers[i].totalEloCompare > 0){
-				this.playingPlayers[i].elo += Math.round(Elo.getK(this.playingPlayers[i].elo) * this.playingPlayers[i].deltaElo/this.playingPlayers[i].totalEloCompare);
-			}
-			//On ajoute l'elo
+	//On crée la race
+	MysqlManager.addRace(this.map.id, function(raceId){
+		for(var i in this.playingPlayers){
+			if(this.playingPlayers[i].registered){
+				this.playingPlayers[i].played++;
+				if(this.playingPlayers[i].totalEloCompare > 0){
+					this.playingPlayers[i].elo += Math.round(Elo.getK(this.playingPlayers[i].elo) * this.playingPlayers[i].deltaElo/this.playingPlayers[i].totalEloCompare);
+				}
 
-			MysqlManager.updateUser({elo:this.playingPlayers[i].elo, played:this.playingPlayers[i].played}, p.id, function(){});
-			//Update elo, nb played
-			if(this.playingPlayers[i].time != null){
-				MysqlManager.addTemps(this.playingPlayers[i].id, this.map.id, this.playingPlayers[i].time, function(){});
+				MysqlManager.updateUser({elo:this.playingPlayers[i].elo, played:this.playingPlayers[i].played}, p.id, function(){});
+				if(this.playingPlayers[i].time != null){
+					MysqlManager.addTemps(this.playingPlayers[i].id, raceId, this.playingPlayers[i].time, function(){});
+				}
 			}
-			//On ajoute le temps si non null
 		}
-		
-	}
-	this.clear();
+		this.clear();
+	});
 }
 
 Room.prototype.update = function(){

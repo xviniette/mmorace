@@ -2,6 +2,11 @@ var Utils = {};
 
 //Réactions au événemments
 Utils.onLogin = function(data, socket){
+	//Si déjà connecté avec un compte
+	var p = game.getPlayerBySocket(socket.id);
+	if(p != null){
+		Utils.onDisconnect(socket);
+	}
 	if(data.login && data.password){
 		//Inscrit
 		MysqlManager.getUserByConnection(data.login, crypto.createHash('sha256').update(data.password).digest("hex"), function(res){
