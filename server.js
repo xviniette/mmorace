@@ -42,28 +42,6 @@ app.get('/',function(req, res){
 	res.sendFile(__dirname + '/public/index.html');
 });
 
-app.get( '/user/:id' , function( req, res) {
-	MysqlManager.getUserById(req.params.id, function(r){
-		if(r != null){
-			delete r.password;
-			delete r.email;
-		}
-		res.json(r);
-	});
-});
-
-app.get( '/rank/:type/:desc/:min/:max' , function( req, res) {
-	MysqlManager.getRanking(req.params.type, req.params.desc, req.params.min, req.params.max, function(r){
-		res.json(r);
-	});
-});
-
-app.get( '/mapRank/:id/:min/:max' , function( req, res) {
-	MysqlManager.getRankingMap(req.params.id, req.params.min, req.params.max, function(r){
-		res.json(r);
-	});
-});
-
 app.get( '/*' , function( req, res, next ) {
 	var file = req.params[0];
 	res.sendFile( __dirname + '/public/' + file );

@@ -5,9 +5,35 @@ var Client = function(){
 
 	this.keys = {};
 
+	this.fps = FPS;
+	this.deltaTime = 1/this.fps;
 	this.lastFrame = Date.now();
 
 	this.room;
+}
+
+Client.prototype.update = function(){
+	var now = Date.now();
+	var d = this.deltaTime * 1000;
+	while(now - this.lastFrame >= d){
+		//update
+		this.lastFrame += d;
+	}
+}
+
+Client.prototype.initRoom = function(data){
+	this.room = new Room(data);
+	this.room.players = [];
+	this.room.playingPlayers = [];
+	for(var i in data.players){
+		data.players[i].room = this.room;
+		this.room.players.push(new Player(data.players[i]));
+	}
+
+	for(var i in data.playingPlayers){
+		data.playingPlayers[i].room = this.room;
+		this.room.playingPlayers.push(new Player(data.playingPlayers[i]));
+	}
 }
 
 Client.prototype.loadImages = function(sources, callback){

@@ -8,17 +8,15 @@ var inputsKeyCode = {
 };
 
 $(function(){
-	var StoragePseudo = localStorage.getItem("pseudo");
-	if(StoragePseudo){
-		$("#login").val(StoragePseudo)
-	}
 	client = new Client();
 
-	setInterval(function(){
-		if(client.room){
+	function update(timestamp) {
+		if(client){
 			client.update();
-			//client.display.draw();
 		}
-	}, 1000/FPS);
+		requestAnimationFrame(update);
+	}
+
+	requestAnimationFrame(update);
 });
 

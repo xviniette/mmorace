@@ -80,7 +80,7 @@ Utils.onSignin = function(data, socket){
 					online:false
 				}
 				MysqlManager.addUser(d, function(){
-					_this.onLogin(data);
+					_this.onLogin(data, socket);
 				});
 			}else{
 				//Login utilisé

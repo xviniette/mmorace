@@ -7,6 +7,25 @@
 </head>
 <body>	
 
+	<div id="ConnectionPanel">
+		Connexion
+		<form id="login">
+			<input type="text" palceholder="login" id="login_login">
+			<input type="text" palceholder="password" id="login_password">
+			<input type="submit" value="Connexion">
+		</form>
+		Inscription
+		<form id="signin">
+			<input type="text" palceholder="login" id="signin_login">
+			<input type="text" palceholder="password" id="signin_password">
+			<input type="submit" value="Inscription">
+		</form>
+	</div>
+
+	<div id="lobby">
+		<div id="lobbyPlayers"></div>
+	</div>
+
 
 	<script src="js/socketio.js"></script>
 	<script src="js/jquery.js"></script>
@@ -20,6 +39,8 @@
 	<script src="js/clientFunctions.js"></script>
 
 	<script src="js/Player.js"></script>
+	<script src="js/Map.js"></script>
+	<script src="js/Car.js"></script>
 	<script src="js/Room.js"></script>
 	<script src="js/Display.js"></script>
 	<script src="js/Client.js"></script>

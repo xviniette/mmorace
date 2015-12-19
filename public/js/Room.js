@@ -218,8 +218,8 @@ Room.prototype.getInitInfo = function(){
 	var data = {
 		id:this.id,
 		state:this.state,
-		endState:this.endState - Date.now(),
-		startRace:this.startRace - Date.now(),
+		endState:(this.endState == 0) ? null : this.endState - Date.now(),
+		startRace:(this.startRace == 0) ? null : this.startRace - Date.now(),
 		mapPoll:this.mapPoll
 	};
 

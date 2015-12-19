@@ -22,4 +22,20 @@ $(function(){
 			}
 		}
 	});
+
+	//CONNEXION
+	$("#login").submit(function(e){
+		e.preventDefault();
+		if($("#login_password").val().length == 0){
+			socket.emit("login", {"login":$("#login_login").val()});
+		}else{
+			socket.emit("login", {"login":$("#login_login").val(), "password":$("#login_password").val()});
+		}
+	});
+
+	//Inscription
+	$("#signin").submit(function(e){
+		e.preventDefault();
+		socket.emit("signin", {"login":$("#signin_login").val(), "password":$("#signin_password").val()});
+	});
 });
