@@ -7,6 +7,8 @@
 </head>
 <body>	
 
+	<canvas id="canvas" width="1000" height="800"></canvas>
+
 	<div id="ConnectionPanel">
 		Connexion
 		<form id="login">
@@ -24,6 +26,12 @@
 
 	<div id="lobby">
 		<div id="lobbyPlayers"></div>
+		<form id="participate">
+			<select id="participate_map">
+			</select>
+			<input type="submit" value="Rejoindre">
+		</form>
+		<div id="participatingPlayers"></div>
 	</div>
 
 

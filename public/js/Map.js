@@ -35,6 +35,13 @@ Map.prototype.pointInFinish = function(x, y){
 	return false;
 }
 
+Map.prototype.parsing = function(){
+	this.track = JSON.parse(this.track);
+	this.checkpoints = JSON.parse(this.checkpoints);
+	this.finish = JSON.parse(this.finish);
+	this.start = JSON.parse(this.start);
+}
+
 Map.prototype.init = function(json){
 	for(var i in json){
 		this[i] = json[i];

@@ -38,4 +38,12 @@ $(function(){
 		e.preventDefault();
 		socket.emit("signin", {"login":$("#signin_login").val(), "password":$("#signin_password").val()});
 	});
+
+	//Participer
+	$("#participate").submit(function(e){
+		e.preventDefault();
+		socket.emit("participate", {map:$("#participate_map").val()});
+	});
+
+	
 });

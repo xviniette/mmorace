@@ -27,6 +27,7 @@ db.connect(function(err){
 
 eval(fs.readFileSync('./public/js/Mysql.js')+'');
 var MysqlManager = new Mysql(db);
+MysqlManager.everybodyOffline();
 
 eval(fs.readFileSync('./public/js/config.js')+'');
 eval(fs.readFileSync('./public/js/common.js')+'');
@@ -53,6 +54,8 @@ var unPlayer = new UniqueNumber(1);
 var isServer = true;
 var game = new Game();
 
+game.initMaps();
+
 
 //physic game
 setInterval(function(){
@@ -71,8 +74,8 @@ io.on('connection', function(socket){
 		Utils.onLogin(data, socket);
 	});
 
-	socket.on("join", function(){
-		Utils.onDisconnect(socket);
+	socket.on("participate", function(data){
+		Utils.onParticipate(data, socket);
 	});
 
 	socket.on("disconnect", function(){

@@ -45,6 +45,11 @@ Mysql.prototype.updateUser = function(dataUser, id, callback){
 	});
 }
 
+Mysql.prototype.everybodyOffline = function(){
+	var dataUser = {online:0};
+	this.db.query("UPDATE users SET ?;", [dataUser], function(e, r, f){});
+}
+
 
 Mysql.prototype.getRanking = function(type, desc, min, max, callback){
 	var requete = "SELECT id, pseudo, elo, xp, played, online, registration_time, connection_time FROM users ORDER BY ";
@@ -85,8 +90,7 @@ Mysql.prototype.addTemps = function(userid, raceid, time, callback){
 	var data = {
 		id_u:userid,
 		id_r:raceid,
-		timestamp:time,
-		date:Math.floor(Date.now()/1000)
+		timestamp:time
 	}
 	this.db.query("INSERT INTO times SET ?", data, function(e, r, f){
 		callback();
@@ -96,6 +100,15 @@ Mysql.prototype.addTemps = function(userid, raceid, time, callback){
 Mysql.prototype.getRankingMap = function(id, min, max, callback){
 	var requete = "SELECT u.id, u.pseudo, u.elo, u.xp, u.played, u.online, t.timestamp, t.date FROM times t, users u WHERE u.id = t.id_u AND t.id_m = "+id+" ORDER BY t.timestamp ASC ";
 	requete += "LIMIT "+min+", "+max+";";
+	this.db.query(requete, function(e, r, f){
+		callback(r);
+	});
+}
+
+//MAP
+
+Mysql.prototype.getMaps = function(callback){
+	var requete = "SELECT * FROM maps;";
 	this.db.query(requete, function(e, r, f){
 		callback(r);
 	});

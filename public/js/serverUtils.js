@@ -11,6 +11,12 @@ Utils.onLogin = function(data, socket){
 		//Inscrit
 		MysqlManager.getUserByConnection(data.login, crypto.createHash('sha256').update(data.password).digest("hex"), function(res){
 			if(res != null){
+				var ptest = game.getPlayerById(res.id);
+				if(ptest != null){
+					//Si un joueur est déjà joué sur ce compte => on le déco
+					Utils.onDisconnect({id:ptest.socket});
+					Utils.messageTo(ptest.socket, "login", true);
+				}
 				var d = {
 					id:res.id,
 					pseudo:res.pseudo,
@@ -86,6 +92,14 @@ Utils.onSignin = function(data, socket){
 				//Login utilisé
 			}
 		});
+	}
+}
+
+Utils.onParticipate = function(data, socket){
+	var p = game.getPlayerBySocket(socket.id);
+	if(!p){return;}
+	if(p.room){
+		p.room.participate(p, data.map);
 	}
 }
 

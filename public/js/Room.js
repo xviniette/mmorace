@@ -5,14 +5,17 @@ var Room = function(json){
 	this.playingPlayers = [];
 
 	this.mapPoll = [];
+	this.selectableMaps = [];
 
 	this.map = null;
 
 	this.state = 0; 
 	//0 : participer
 	//1 : course
-	this.endState = 0;
-	this.startRace = 0;
+	this.endState = null;
+	this.startRace = null;
+
+	
 	
 
 	//FPS PHYSIQUE
@@ -26,6 +29,7 @@ var Room = function(json){
 	this.newtorklastFrame = Date.now();
 
 	this.init(json);
+	this.getMaps();
 }
 
 Room.prototype.init = function(json){
@@ -38,7 +42,19 @@ Room.prototype.clear = function(){
 	this.playingPlayers = [];
 	this.mapPoll = [];
 	this.state = 0;
-	this.endState = 0;
+	this.endState = null;
+	this.startRace = null;
+
+	this.getMaps();	
+}
+
+Room.prototype.getMaps = function(){
+	if(isServer){
+		this.selectableMaps = [];
+		for(var i in game.maps){
+			this.selectableMaps.push(game.maps[i]);
+		}
+	}
 }
 
 Room.prototype.participate = function(player, map){
@@ -51,14 +67,25 @@ Room.prototype.participate = function(player, map){
 			}
 		}
 		if(!alreadyIn){
-			this.mapPoll.push(map);
+			var mapIn = false;
+			for(var i in this.selectableMaps){
+				if(this.selectableMaps[i].id == map){
+					mapIn = true;
+				}
+			}
+			if(mapIn){
+				this.mapPoll.push(map);
+			}else{
+				this.mapPoll.push(0);
+			}
+			//Ajout joueur
 			this.playingPlayers.push(player);
 			if(isServer){
 				//On prévient tout le monde du nouveau joueur
 				for(var i in this.players){
 					Utils.messageTo(this.players[i].socket, "partipatingPlayer", {player:player.getInit(), map:map});
 				}
-				if(this.endState == 0){
+				if(this.endState == null){
 					this.endState = Date.now() + PREPARATIONTIME;
 					//Envoi message compte à rebour
 					for(var i in this.players){
@@ -70,19 +97,41 @@ Room.prototype.participate = function(player, map){
 	}
 }
 
-Room.prototype.startRace = function(){
+Room.prototype.startingRace = function(){
 	var map = this.mapPoll[random(0, this.mapPoll.length-1)];
+	this.map = null;
+	for(var i in this.selectableMaps){
+		if(this.selectableMaps[i].id == map){
+			this.map = this.selectableMaps[i];
+			break;
+		}
+	}
+
+	if(this.map == null){
+		this.map = game.maps[random(0, game.maps.length - 1)];
+	}
+
+
 	this.state = 1;
 	this.startRace = STARTTIME + Date.now();
-	this.endState = this.startRace + 2 * 60 * 1000;
+	this.endState = this.startRace + this.map.maxTime;
 	for(var i in this.playingPlayers){
 		this.playingPlayers[i].clear();
-		this.playingPlayers[i].spawn(map);
+		//this.playingPlayers[i].spawn(map);
+	}
+
+	var initInfos = this.getInitInfo();
+	for(var i in this.players){
+		Utils.messageTo(this.players[i].socket, "init", initInfos);
 	}
 }
 
 
 Room.prototype.endRace = function(){
+	var _this = this;
+	this.state = 0;
+	this.endState = null;
+	this.startRace = null;
 	//CALCUL ELO
 	for(var i = 0; i < this.playingPlayers.length; i++){
 		for(var j = i + 1; j < this.playingPlayers.length; j++){
@@ -111,22 +160,20 @@ Room.prototype.endRace = function(){
 		}
 	}
 
-	//On crée la race
+	//On crée la race database
 	MysqlManager.addRace(this.map.id, function(raceId){
-		for(var i in this.playingPlayers){
-			if(this.playingPlayers[i].registered){
-				this.playingPlayers[i].played++;
-				if(this.playingPlayers[i].totalEloCompare > 0){
-					this.playingPlayers[i].elo += Math.round(Elo.getK(this.playingPlayers[i].elo) * this.playingPlayers[i].deltaElo/this.playingPlayers[i].totalEloCompare);
+		for(var i in _this.playingPlayers){
+			if(_this.playingPlayers[i].registered){
+				_this.playingPlayers[i].played++;
+				if(_this.playingPlayers[i].totalEloCompare > 0){
+					_this.playingPlayers[i].elo += Math.round(Elo.getK(_this.playingPlayers[i].elo) * _this.playingPlayers[i].deltaElo/_this.playingPlayers[i].totalEloCompare);
 				}
 
-				MysqlManager.updateUser({elo:this.playingPlayers[i].elo, played:this.playingPlayers[i].played}, p.id, function(){});
-				if(this.playingPlayers[i].time != null){
-					MysqlManager.addTemps(this.playingPlayers[i].id, raceId, this.playingPlayers[i].time, function(){});
-				}
+				MysqlManager.updateUser({elo:_this.playingPlayers[i].elo, played:_this.playingPlayers[i].played}, _this.playingPlayers[i].id, function(){});
+				MysqlManager.addTemps(_this.playingPlayers[i].id, raceId, (_this.playingPlayers[i].time == null) ? -1 : _this.playingPlayers[i].time, function(){});
 			}
 		}
-		this.clear();
+		_this.clear();
 	});
 }
 
@@ -147,10 +194,19 @@ Room.prototype.update = function(){
 }
 
 Room.prototype.serverLogic = function(){
+	var now = Date.now();
 	if(this.state == 1){
 		//course
+		//Si fin de course (Temps dépassé ou tout le monde a fini)
+		if(this.endState < now){
+			this.endRace();
+		}
 	}else{
 		//preparation
+		if(this.endState != null && this.endState < now){
+			//On lance le début de la course
+			this.startingRace();
+		}
 	}
 }
 
@@ -220,7 +276,8 @@ Room.prototype.getInitInfo = function(){
 		state:this.state,
 		endState:(this.endState == 0) ? null : this.endState - Date.now(),
 		startRace:(this.startRace == 0) ? null : this.startRace - Date.now(),
-		mapPoll:this.mapPoll
+		mapPoll:this.mapPoll,
+		selectableMaps:this.selectableMaps
 	};
 
 	data.players = [];

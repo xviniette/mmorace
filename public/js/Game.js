@@ -1,6 +1,19 @@
 var Game = function(){
 	this.players = {};
 	this.rooms = [];
+
+	this.maps = [];
+}
+
+Game.prototype.initMaps = function(){
+	_this = this;
+	MysqlManager.getMaps(function(res){
+		for(var i in res){
+			var m = new Map(res[i]);
+			m.parsing();
+			_this.maps.push(m);
+		}
+	});
 }
 
 Game.prototype.update = function(){
