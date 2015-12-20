@@ -1,6 +1,9 @@
 var Map = function(json){
 	this.id;
 	this.name;
+	this.img;
+
+	this.mapPixels = [];
 
 	this.nbLaps = 1;
 
@@ -10,7 +13,6 @@ var Map = function(json){
 	this.width = 1000;
 	this.height = 1000;
 
-	this.track = [[]];
 	this.checkpoints = [{x:100, y:100, r:50, nb:1}];
 	this.finish = {
 		x:0,
@@ -28,6 +30,11 @@ var Map = function(json){
 	this.init(json);
 }
 
+Map.prototype.isRoad = function(x, y){
+	var index = (y*this.width + x) * 4
+	return (this.mapPixels[index] == 255);
+}
+
 Map.prototype.pointInFinish = function(x, y){
 	if(this.finish.x <= x && this.finish.x + this.finish.w >= x && this.finish.y <= y && this.finish.h + this.finish.w >= y){
 		return true;
@@ -36,7 +43,6 @@ Map.prototype.pointInFinish = function(x, y){
 }
 
 Map.prototype.parsing = function(){
-	this.track = JSON.parse(this.track);
 	this.checkpoints = JSON.parse(this.checkpoints);
 	this.finish = JSON.parse(this.finish);
 	this.start = JSON.parse(this.start);
@@ -59,7 +65,7 @@ Map.prototype.getInfos = function(){
 		height:this.height,
 		start:this.start,
 		checkpoints:this.checkpoints,
-		track:this.track,
+		img:this.img,
 		finish:this.finish
 	}
 }

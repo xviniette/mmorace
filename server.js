@@ -5,6 +5,7 @@ var uuid = require('node-uuid');
 var fs = require('fs');
 var crypto = require('crypto');
 var mysql = require('mysql');
+var PNG = require('png-js');
 
 server.listen(1323);
 
@@ -55,6 +56,8 @@ var isServer = true;
 var game = new Game();
 
 game.initMaps();
+
+
 
 
 //physic game

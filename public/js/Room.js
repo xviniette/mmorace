@@ -8,6 +8,7 @@ var Room = function(json){
 	this.selectableMaps = [];
 
 	this.map = null;
+	this.mapPixels = [];
 
 	this.state = 0; 
 	//0 : participer
@@ -98,6 +99,7 @@ Room.prototype.participate = function(player, map){
 }
 
 Room.prototype.startingRace = function(){
+	var _this = this;
 	var map = this.mapPoll[random(0, this.mapPoll.length-1)];
 	this.map = null;
 	for(var i in this.selectableMaps){
@@ -110,6 +112,10 @@ Room.prototype.startingRace = function(){
 	if(this.map == null){
 		this.map = game.maps[random(0, game.maps.length - 1)];
 	}
+
+	PNG.decode('public/maps/'+this.map.img, function(pixels) {
+		_this.map.mapPixels = pixels;
+	});
 
 
 	this.state = 1;
@@ -125,7 +131,6 @@ Room.prototype.startingRace = function(){
 		Utils.messageTo(this.players[i].socket, "init", initInfos);
 	}
 }
-
 
 Room.prototype.endRace = function(){
 	var _this = this;
