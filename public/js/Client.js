@@ -19,6 +19,13 @@ Client.prototype.update = function(){
 		//update
 		this.lastFrame += d;
 	}
+	this.updateDisplay();
+}
+
+Client.prototype.updateDisplay = function(){
+	if(this.room){
+		this.display.displayCooldown(this.room.endState);
+	}	
 }
 
 Client.prototype.initRoom = function(data){

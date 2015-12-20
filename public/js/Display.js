@@ -6,6 +6,14 @@ var Display = function(id, game){
 	this.game = game;
 }
 
+Display.prototype.displayCooldown = function(cd){
+	if(cd == null){
+		$("#cooldown").html("NULL");
+	}else{
+		$("#cooldown").html(cd - Date.now());
+	}
+}
+
 Display.prototype.displayLobbyPlayers = function(players){
 	var html = '<ul>';
 	for(var i in players){

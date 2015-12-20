@@ -14,6 +14,7 @@ $(function(){
 		if(client){
 			client.update();
 		}
+
 		requestAnimationFrame(update);
 	}
 

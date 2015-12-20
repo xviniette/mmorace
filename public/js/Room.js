@@ -174,6 +174,10 @@ Room.prototype.endRace = function(){
 			}
 		}
 		_this.clear();
+		var initInfos = _this.getInitInfo();
+		for(var i in _this.players){
+			Utils.messageTo(_this.players[i].socket, "init", initInfos);
+		}
 	});
 }
 
@@ -274,8 +278,8 @@ Room.prototype.getInitInfo = function(){
 	var data = {
 		id:this.id,
 		state:this.state,
-		endState:(this.endState == 0) ? null : this.endState - Date.now(),
-		startRace:(this.startRace == 0) ? null : this.startRace - Date.now(),
+		endState:(this.endState == null) ? null : this.endState - Date.now(),
+		startRace:(this.startRace == null) ? null : this.startRace - Date.now(),
 		mapPoll:this.mapPoll,
 		selectableMaps:this.selectableMaps
 	};

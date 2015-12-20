@@ -15,6 +15,12 @@ $(function(){
 	});
 
 	socket.on("init", function(data){
+		if(data.endState != null){
+			data.endState = Date.now() + data.endState;
+		}
+		if(data.startRace != null){
+			data.startRace = Date.now() + data.startRace;
+		}
 		client.initRoom(data);
 		client.display.displayLobbyPlayers(client.room.players);
 		client.display.clearParticipatingPlayers();
@@ -34,6 +40,7 @@ $(function(){
 	});
 
 	socket.on("cooldownStart", function(data){
+		console.log(data);
 		client.room.endState = Date.now() + data;
 	});
 
