@@ -17,6 +17,21 @@ Client.prototype.update = function(){
 	var d = this.deltaTime * 1000;
 	while(now - this.lastFrame >= d){
 		//update
+		if(this.room){
+			if(this.room.state == 1 && this.room.startRace <= now){
+				//Si course en cours et qui a démarré
+				for(var i in this.room.playingPlayers){
+					//On cherche son joueur
+					if(this.room.playingPlayers[i].id == this.pID){
+						socket.emit("inputs", this.keys);
+						this.room.playingPlayers[i].inputs = [this.keys];
+						this.room.playingPlayers[i].update();
+						break;
+					}
+				}
+
+			}
+		}
 		this.lastFrame += d;
 	}
 	this.updateDisplay();
@@ -32,6 +47,11 @@ Client.prototype.initRoom = function(data){
 	this.room = new Room(data);
 	this.room.players = [];
 	this.room.playingPlayers = [];
+
+	if(data.map){
+		this.room.map = new Map(data.map);
+	}
+
 	for(var i in data.players){
 		data.players[i].room = this.room;
 		this.room.players.push(new Player(data.players[i]));
@@ -39,7 +59,28 @@ Client.prototype.initRoom = function(data){
 
 	for(var i in data.playingPlayers){
 		data.playingPlayers[i].room = this.room;
-		this.room.playingPlayers.push(new Player(data.playingPlayers[i]));
+		var pp = new Player(data.playingPlayers[i]);
+		if(data.playingPlayers[i].car){
+			pp.car = new Car(data.playingPlayers[i].car);
+		}
+		this.room.playingPlayers.push(pp);
+	}
+}
+
+Client.prototype.onSnapshot = function(data){
+	var now = Date.now();
+	if(this.room == null){
+		return false;
+	}
+	for(var i in data){
+		for(var j in this.room.playingPlayers){
+			var p = this.room.playingPlayers[j];
+			if(p.id == data[i].id && p.id != this.pID){
+				//Récupération des données et non moi
+				data[i].t = now;
+				p.positions.push(data[i]);
+			}
+		}
 	}
 }
 

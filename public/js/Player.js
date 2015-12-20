@@ -13,6 +13,7 @@ var Player = function(json){
 	this.totalEloCompare = 0;
 
 	this.time = null;
+	this.positions = [];
 
 	this.inputs = [];
 	this.nbInputs = 0;

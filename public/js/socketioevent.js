@@ -11,7 +11,6 @@ $(function(){
 	});
 
 	socket.on("playersStats", function(data){
-		console.log(data);
 	});
 
 	socket.on("init", function(data){
@@ -27,7 +26,6 @@ $(function(){
 		for(var i = 0; i < client.room.playingPlayers.length; i++){
 			client.display.addParticipatingPlayers(client.room.playingPlayers[i], client.room.mapPoll[i]);
 		}
-		console.log(client.room);
 		client.display.setSelectableMaps(client.room.selectableMaps);
 	});
 
@@ -40,7 +38,6 @@ $(function(){
 	});
 
 	socket.on("cooldownStart", function(data){
-		console.log(data);
 		client.room.endState = Date.now() + data;
 	});
 

@@ -15,8 +15,6 @@ var Room = function(json){
 	//1 : course
 	this.endState = null;
 	this.startRace = null;
-
-	
 	
 
 	//FPS PHYSIQUE
@@ -123,7 +121,7 @@ Room.prototype.startingRace = function(){
 	this.endState = this.startRace + this.map.maxTime;
 	for(var i in this.playingPlayers){
 		this.playingPlayers[i].clear();
-		//this.playingPlayers[i].spawn(map);
+		this.playingPlayers[i].spawn(this.map);
 	}
 
 	var initInfos = this.getInitInfo();
@@ -179,9 +177,9 @@ Room.prototype.endRace = function(){
 			}
 		}
 		_this.clear();
-		var initInfos = _this.getInitInfo();
+		var initMessage = _this.getInitInfo();
 		for(var i in _this.players){
-			Utils.messageTo(_this.players[i].socket, "init", initInfos);
+			Utils.messageTo(_this.players[i].socket, "init", initMessage);
 		}
 	});
 }
@@ -198,6 +196,12 @@ Room.prototype.update = function(){
 	//RESEAU
 	var d = this.newtorkdeltaTime * 1000;
 	while(now - this.newtorklastFrame >= d){
+		if(this.state == 1){
+			var snapshot = this.getSnapshot();
+			for(var i in this.players){
+				Utils.messageTo(this.players[i].socket, "snapshot", snapshot);
+			}
+		}
 		this.newtorklastFrame += d;
 	}
 }
@@ -277,6 +281,7 @@ Room.prototype.getSnapshot = function(){
 	for(var i in this.playingPlayers){
 		ps.push(this.playingPlayers[i].getSnapshot());
 	}
+	return ps;
 }
 
 Room.prototype.getInitInfo = function(){
@@ -286,8 +291,12 @@ Room.prototype.getInitInfo = function(){
 		endState:(this.endState == null) ? null : this.endState - Date.now(),
 		startRace:(this.startRace == null) ? null : this.startRace - Date.now(),
 		mapPoll:this.mapPoll,
-		selectableMaps:this.selectableMaps
 	};
+
+	data.selectableMaps = [];
+	for(var i in this.selectableMaps){
+		data.selectableMaps.push(this.selectableMaps[i].getInfos());
+	}
 
 	data.players = [];
 	for(var i in this.players){

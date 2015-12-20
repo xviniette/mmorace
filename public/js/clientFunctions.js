@@ -51,10 +51,6 @@ function htmlEntities(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function join(id){
-	socket.emit("join", {id:id});
-}
-
 Element.prototype.remove = function() {
     this.parentElement.removeChild(this);
 }

@@ -36,6 +36,5 @@ Display.prototype.setSelectableMaps = function(maps){
 	for(var i in maps){
 		html += '<option value="'+maps[i].id+'">'+maps[i].name+'</option>';
 	}
-	console.log(html);
 	$("#participate_map").html(html);
 }

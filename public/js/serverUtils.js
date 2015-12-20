@@ -95,6 +95,14 @@ Utils.onSignin = function(data, socket){
 	}
 }
 
+Utils.onInputs = function(data, socket){
+	var p = game.getPlayerBySocket(socket.id);
+	if(!p){return;}
+	if(p.room){
+		p.inputs.push(data);
+	}
+}
+
 Utils.onParticipate = function(data, socket){
 	var p = game.getPlayerBySocket(socket.id);
 	if(!p){return;}

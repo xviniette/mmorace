@@ -36,6 +36,7 @@ eval(fs.readFileSync('./public/js/Game.js')+'');
 eval(fs.readFileSync('./public/js/Room.js')+'');
 eval(fs.readFileSync('./public/js/Map.js')+'');
 eval(fs.readFileSync('./public/js/Player.js')+'');
+eval(fs.readFileSync('./public/js/Car.js')+'');
 eval(fs.readFileSync('./public/js/UniqueNumber.js')+'');
 eval(fs.readFileSync('./public/js/serverUtils.js')+'');
 
@@ -75,6 +76,10 @@ io.on('connection', function(socket){
 
 	socket.on("login", function(data){
 		Utils.onLogin(data, socket);
+	});
+
+	socket.on("inputs", function(data){
+		Utils.onInputs(data, socket);
 	});
 
 	socket.on("participate", function(data){
