@@ -29,11 +29,10 @@ Display.prototype.render = function(){
 			this.ctx.fillRect(map.finish.x, map.finish.y, map.finish.w, map.finish.h);
 
 			for(var i in r.playingPlayers){
-				
 				var player = r.playingPlayers[i];
 				var interp = INTERPOLATION;
 				if(player.id == this.client.pID){
-					interp = 200;
+					interp = 1000/FPS;
 				}
 				var carData = player.getInterpolatePosition(now, interp);
 				this.ctx.save();

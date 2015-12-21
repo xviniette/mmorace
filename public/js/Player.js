@@ -47,17 +47,25 @@ Player.prototype.update = function(){
 }
 
 Player.prototype.getInterpolatePosition = function(t, interp){
-	var data = {};
+	var data = null;
 	for(var i = 0; i < this.positions.length - 1; i++){
+		data = {};
 		if(this.positions[i].t <= t - interp && this.positions[i+1].t > t - interp){
 			var ratio = ((t - interp)-this.positions[i].t)/(this.positions[i+1].t - this.positions[i].t);
 			data.x = this.positions[i].x + ratio * (this.positions[i+1].x - this.positions[i].x);
 			data.y = this.positions[i].y + ratio * (this.positions[i+1].y - this.positions[i].y);
 			data.rotation = this.positions[i].rotation + ratio * (this.positions[i+1].rotation - this.positions[i].rotation);
-			break;
+			return data;
 		}
 	}
-	this.positions.splice(0, i);
+
+	if(this.positions.length > 0){
+		data = this.positions[0];
+		return data;
+	}
+	
+	data = this.getSnapshot();
+	data.rotation = degtorad(data.rotation);
 	return data;
 }
 
