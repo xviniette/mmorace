@@ -211,6 +211,9 @@ Room.prototype.serverLogic = function(){
 	if(this.state == 1){
 		//course
 		//Si fin de course (Temps dépassé ou tout le monde a fini)
+		for(var i in this.playingPlayers){
+			this.playingPlayers[i].update();
+		}
 		if(this.endState < now){
 			this.endRace();
 		}

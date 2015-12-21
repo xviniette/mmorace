@@ -38,8 +38,11 @@ Client.prototype.update = function(){
 }
 
 Client.prototype.updateDisplay = function(){
-	if(this.room){
+	if(this.room != null){
 		this.display.displayCooldown(this.room.endState);
+		if(this.room.state == 1){
+			this.display.render();
+		}
 	}	
 }
 
@@ -68,6 +71,7 @@ Client.prototype.initRoom = function(data){
 }
 
 Client.prototype.onSnapshot = function(data){
+	console.log(data);
 	var now = Date.now();
 	if(this.room == null){
 		return false;
@@ -78,7 +82,9 @@ Client.prototype.onSnapshot = function(data){
 			if(p.id == data[i].id && p.id != this.pID){
 				//Récupération des données et non moi
 				data[i].t = now;
+				data[i].rotation = degtorad(data[i].rotation);
 				p.positions.push(data[i]);
+				p.car.init(data[i]);
 			}
 		}
 	}

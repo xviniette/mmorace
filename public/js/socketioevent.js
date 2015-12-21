@@ -29,6 +29,10 @@ $(function(){
 		client.display.setSelectableMaps(client.room.selectableMaps);
 	});
 
+	socket.on("snapshot", function(data){
+		client.onSnapshot(data);
+	});
+
 	socket.on("partipatingPlayer", function(data){
 		data.player.room = client.room;
 		var p = new Player(data.player);
