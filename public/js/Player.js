@@ -46,15 +46,41 @@ Player.prototype.update = function(){
 	this.inputs.splice(0, j);
 }
 
+Player.prototype.getInterpolatePosition = function(t, interp){
+	var data = {};
+	for(var i = 0; i < this.positions.length - 1; i++){
+		if(this.positions[i].t <= t - interp && this.positions[i+1].t > t - interp){
+			var ratio = ((t - interp)-this.positions[i].t)/(this.positions[i+1].t - this.positions[i].t);
+			data.x = this.positions[i].x + ratio * (this.positions[i+1].x - this.positions[i].x);
+			data.y = this.positions[i].y + ratio * (this.positions[i+1].y - this.positions[i].y);
+			data.rotation = this.positions[i].rotation + ratio * (this.positions[i+1].rotation - this.positions[i].rotation);
+			break;
+		}
+	}
+	this.positions.splice(0, i);
+	return data;
+}
+
 Player.prototype.getTimer = function(){
-	return Math.round(this.room.deltaTime * this.nbInputs);
+	return Math.round(this.room.deltaTime * 1000 * this.nbInputs);
 }
 
 Player.prototype.spawn = function(map){
-	this.car = new Car();
+	this.car = new Car({player:this});
 	this.car.x = map.start.x;
 	this.car.y = map.start.y;
 	this.car.carDir = map.start.rotation;
+}
+
+Player.prototype.endRace = function(){
+	if(isServer){
+		if(this.time == null){
+			this.time = this.getTimer();
+			for(var i in this.room.players){
+				Utils.messageTo(this.room.players[i].socket, "timer", {id:this.id, time:this.time});
+			}
+		}
+	}
 }
 
 Player.prototype.clear = function(){

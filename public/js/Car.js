@@ -1,4 +1,10 @@
 var Car = function(json){
+	this.player;
+	this.map;
+
+	this.lastCheckpoint = 0;
+	this.nbLap = 0;
+
 	this.x = 0;
 	this.y = 0;
 
@@ -53,6 +59,58 @@ Car.prototype.init = function(json){
 	for(var i in json){
 		this[i] = json[i];
 	}
+}
+
+Car.prototype.update = function(inputs){
+	this.map = this.player.room.map;
+	if(inputs.u){
+		this.moveUp();
+	}
+	if(inputs.d){
+		this.moveDown();
+	}
+	if(inputs.l){
+		this.moveLeft();
+	}
+	if(inputs.r){
+		this.moveRight();
+	}
+	if(!inputs.l && !inputs.r){
+		this.moveStraight();
+	}
+	this.drifting = false;
+	if(inputs.b){
+		this.drifting = true;
+	}
+
+	this.slowDown();
+	this.x = this.x + this.speedX;
+	this.y = this.y + this.speedY;
+	this.rotation = this.carDir;
+
+	//Check checkpoint || Fin
+	for(var i in this.map.checkpoints){
+		var c = this.map.checkpoints[i];
+		if(distance(this.x, this.y, c.x, c.y) <= c.r){
+
+			//collision
+			if(this.lastCheckpoint == c.nb - 1){
+				this.lastCheckpoint = c.nb;
+			}	
+		}
+	}
+
+	//check finish
+	if(this.map.pointInFinish(this.x, this.y)){
+		if(this.lastCheckpoint == this.map.maxCheckpoint){
+			this.nbLap++;
+			this.lastCheckpoint = 0;
+		}
+		if(this.nbLap >= this.map.nbLaps){
+			this.player.endRace();
+		}
+	}
+
 }
 
 Car.prototype.slowDown = function(){
@@ -129,34 +187,6 @@ Car.prototype.slowDown = function(){
 	this.speedOnShow = this.directSpeed + speedOffSet;
 	this.towardSpeed = -this.speedX * this.sinDir + this.speedY * this.cosDir;
 }
-
-Car.prototype.update = function(inputs){
-	if(inputs.u){
-		this.moveUp();
-	}
-	if(inputs.d){
-		this.moveDown();
-	}
-	if(inputs.l){
-		this.moveLeft();
-	}
-	if(inputs.r){
-		this.moveRight();
-	}
-	if(!inputs.l && !inputs.r){
-		this.moveStraight();
-	}
-	this.drifting = false;
-	if(inputs.b){
-		this.drifting = true;
-	}
-
-	this.slowDown();
-	this.x = this.x + this.speedX;
-	this.y = this.y + this.speedY;
-	this.rotation = this.carDir;
-}
-
 
 Car.prototype.moveUp = function(){
 	if(this.aSpeed < 0){

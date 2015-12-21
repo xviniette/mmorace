@@ -32,6 +32,7 @@ MysqlManager.everybodyOffline();
 
 eval(fs.readFileSync('./public/js/config.js')+'');
 eval(fs.readFileSync('./public/js/common.js')+'');
+eval(fs.readFileSync('./public/js/Elo.js')+'');
 eval(fs.readFileSync('./public/js/Game.js')+'');
 eval(fs.readFileSync('./public/js/Room.js')+'');
 eval(fs.readFileSync('./public/js/Map.js')+'');

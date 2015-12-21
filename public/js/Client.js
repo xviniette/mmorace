@@ -26,6 +26,10 @@ Client.prototype.update = function(){
 						socket.emit("inputs", this.keys);
 						this.room.playingPlayers[i].inputs = [this.keys];
 						this.room.playingPlayers[i].update();
+						var data = this.room.playingPlayers[i].getSnapshot();
+						data.t = now;
+						data.rotation = degtorad(data.rotation);
+						this.room.playingPlayers[i].positions.push(data);
 						break;
 					}
 				}
@@ -64,6 +68,7 @@ Client.prototype.initRoom = function(data){
 		data.playingPlayers[i].room = this.room;
 		var pp = new Player(data.playingPlayers[i]);
 		if(data.playingPlayers[i].car){
+			data.playingPlayers[i].car.player = pp;
 			pp.car = new Car(data.playingPlayers[i].car);
 		}
 		this.room.playingPlayers.push(pp);
@@ -71,7 +76,6 @@ Client.prototype.initRoom = function(data){
 }
 
 Client.prototype.onSnapshot = function(data){
-	console.log(data);
 	var now = Date.now();
 	if(this.room == null){
 		return false;
@@ -84,7 +88,6 @@ Client.prototype.onSnapshot = function(data){
 				data[i].t = now;
 				data[i].rotation = degtorad(data[i].rotation);
 				p.positions.push(data[i]);
-				p.car.init(data[i]);
 			}
 		}
 	}

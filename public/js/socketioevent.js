@@ -45,6 +45,11 @@ $(function(){
 		client.room.endState = Date.now() + data;
 	});
 
+	socket.on("timer", function(data){
+		console.log(data);
+	});
+
+
 	socket.on("newPlayer", function(data){
 		client.room.addPlayer(new Player(data));
 		client.display.displayLobbyPlayers(client.room.players);

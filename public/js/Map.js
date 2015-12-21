@@ -14,6 +14,7 @@ var Map = function(json){
 	this.height = 1000;
 
 	this.checkpoints = [{x:100, y:100, r:50, nb:1}];
+	this.maxCheckpoint = 0;
 	this.finish = {
 		x:0,
 		y:0,
@@ -36,7 +37,7 @@ Map.prototype.isRoad = function(x, y){
 }
 
 Map.prototype.pointInFinish = function(x, y){
-	if(this.finish.x <= x && this.finish.x + this.finish.w >= x && this.finish.y <= y && this.finish.h + this.finish.w >= y){
+	if(this.finish.x <= x && this.finish.x + this.finish.w >= x && this.finish.y <= y && this.finish.y + this.finish.h >= y){
 		return true;
 	}
 	return false;
@@ -44,6 +45,14 @@ Map.prototype.pointInFinish = function(x, y){
 
 Map.prototype.parsing = function(){
 	this.checkpoints = JSON.parse(this.checkpoints);
+	var max = 0;
+	for(var i in this.checkpoints){
+		if(this.checkpoints[i].nb > max){
+			max = this.checkpoints[i].nb;
+		}
+	}
+	this.maxCheckpoint = max;
+
 	this.finish = JSON.parse(this.finish);
 	this.start = JSON.parse(this.start);
 }
@@ -65,6 +74,7 @@ Map.prototype.getInfos = function(){
 		height:this.height,
 		start:this.start,
 		checkpoints:this.checkpoints,
+		maxCheckpoint:this.maxCheckpoint,
 		img:this.img,
 		finish:this.finish
 	}
