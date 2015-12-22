@@ -55,14 +55,16 @@ Mysql.prototype.getRanking = function(type, desc, min, max, callback){
 	var requete = "SELECT id, pseudo, elo, xp, played, online, registration_time, connection_time FROM users ORDER BY ";
 	if(type == "xp"){
 		requete += "xp ";
+	}else if(type == "played"){
+		requete += "played ";
 	}else{
 		requete += "elo ";
 	}
 
-	if(desc == "desc"){
-		requete += "DESC ";
-	}else{
+	if(desc == "asc"){
 		requete += "ASC ";
+	}else{
+		requete += "DESC ";
 	}
 
 	requete += "LIMIT "+min+", "+max+";";
@@ -80,6 +82,26 @@ Mysql.prototype.addRace = function(mapid, callback){
 	}
 	this.db.query("INSERT INTO races SET ?", data, function(e, r, f){
 		callback(r.insertId);
+	});
+}
+
+Mysql.prototype.getRace = function(id, callback){
+	this.db.query("SELECT r.id, r.id_m, r.date, m.name, m.img FROM races r, maps m WHERE r.id = ? AND m.id = r.id_m;", [id], function(e, r, f){
+		if(r.length == 0){
+			callback(null);
+		}else{
+			callback(r[0]);
+		}
+	});
+}
+
+Mysql.prototype.getTemps = function(id, callback){
+	this.db.query("SELECT u.id, t.timestamp, u.pseudo FROM times t, users u WHERE t.id_r = ? AND t.id_u = u.id ORDER BY t.timestamp ASC;", [id], function(e, r, f){
+		if(r.length == 0){
+			callback(null);
+		}else{
+			callback(r);
+		}
 	});
 }
 
