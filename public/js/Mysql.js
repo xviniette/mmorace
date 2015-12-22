@@ -96,23 +96,21 @@ Mysql.prototype.getRace = function(id, callback){
 }
 
 Mysql.prototype.getTemps = function(id, callback){
-	this.db.query("SELECT u.id, t.timestamp, u.pseudo FROM times t, users u WHERE t.id_r = ? AND t.id_u = u.id ORDER BY t.timestamp ASC;", [id], function(e, r, f){
-		if(r.length == 0){
-			callback(null);
-		}else{
-			callback(r);
-		}
+	this.db.query("SELECT u.id, t.timestamp, u.pseudo, t.oldElo, t.deltaElo FROM times t, users u WHERE t.id_r = ? AND t.id_u = u.id ORDER BY t.timestamp ASC;", [id], function(e, r, f){
+		callback(r);
 	});
 }
 
 
 //TEMPS
 
-Mysql.prototype.addTemps = function(userid, raceid, time, callback){
+Mysql.prototype.addTemps = function(userid, raceid, time, elo, deltaelo, callback){
 	var data = {
 		id_u:userid,
 		id_r:raceid,
-		timestamp:time
+		timestamp:time,
+		oldElo:elo,
+		deltaElo:deltaelo
 	}
 	this.db.query("INSERT INTO times SET ?", data, function(e, r, f){
 		callback();
@@ -128,6 +126,28 @@ Mysql.prototype.getRankingMap = function(id, min, max, callback){
 }
 
 //MAP
+
+Mysql.prototype.getTempsPlayerMap = function(iduser, idmap, min, max, callback){
+	this.db.query("SELECT t.timestamp, r.date, r.id_m FROM times t, races r WHERE t.timestamp != -1 AND t.id_u = ? AND r.id = t.id_r AND r.id_m = ? ORDER BY t.timestamp ASC LIMIT ?, ?;", [iduser, idmap, min, max], function(e, r, f){
+		callback(r);
+	});
+}
+
+Mysql.prototype.getMapFinishedByUser = function(iduser, callback){
+	this.db.query("SELECT DISTINCT m.id, m.name, m.img FROM maps m, times t, races r WHERE r.id_m = m.id AND r.id = t.id_r AND t.id_u = ?;", [iduser], function(e, r, f){
+		callback(r);
+	});
+}
+
+Mysql.prototype.getMap = function(id, callback){
+	this.db.query("SELECT * FROM maps WHERE id = ?;", [id], function(e, r, f){
+		if(r.length == 0){
+			callback(null);
+		}else{
+			callback(r[0]);
+		}
+	});
+}
 
 Mysql.prototype.getMaps = function(callback){
 	var requete = "SELECT * FROM maps;";

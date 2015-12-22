@@ -163,12 +163,13 @@ Room.prototype.endRace = function(){
 		for(var i in _this.playingPlayers){
 			if(_this.playingPlayers[i].registered){
 				_this.playingPlayers[i].played++;
+				var deltaElo = 0;
 				if(_this.playingPlayers[i].totalEloCompare > 0){
-					_this.playingPlayers[i].elo += Math.round(Elo.getK(_this.playingPlayers[i].elo) * _this.playingPlayers[i].deltaElo/_this.playingPlayers[i].totalEloCompare);
+					deltaElo += Math.round(Elo.getK(_this.playingPlayers[i].elo) * _this.playingPlayers[i].deltaElo/_this.playingPlayers[i].totalEloCompare);
 				}
-
+				MysqlManager.addTemps(_this.playingPlayers[i].id, raceId, (_this.playingPlayers[i].time == null) ? -1 : _this.playingPlayers[i].time, _this.playingPlayers[i].elo, deltaElo, function(){});
+				_this.playingPlayers[i].elo += deltaElo;
 				MysqlManager.updateUser({elo:_this.playingPlayers[i].elo, played:_this.playingPlayers[i].played}, _this.playingPlayers[i].id, function(){});
-				MysqlManager.addTemps(_this.playingPlayers[i].id, raceId, (_this.playingPlayers[i].time == null) ? -1 : _this.playingPlayers[i].time, function(){});
 			}
 		}
 		_this.clear();

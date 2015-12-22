@@ -72,6 +72,8 @@ Car.prototype.update = function(inputs){
 	}else{
 		this.maxSpeed = this.offRoadSpeed;
 	}
+	this.driftEndSpeed = this.maxSpeed * 0.2;
+	this.driftStartSpeed = this.maxSpeed * 0.3;
 
 	if(inputs.u){
 		this.moveUp();
