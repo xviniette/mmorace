@@ -6,6 +6,21 @@ var Display = function(id, client){
 	this.client = client;
 }
 
+Display.prototype.loadRoadCollision = function(){
+	var map = this.client.room.map;
+	var canvas = document.getElementById("roadCollision");
+	var ctx = canvas.getContext("2d");
+	var img = new Image(); 
+	img.src = "maps/"+map.img;
+	console.log(img.src);
+	img.onload = function(){
+		canvas.width = map.width;
+		canvas.height = map.height;
+		ctx.drawImage(img, 0, 0);
+		map.roadCanvasctx = ctx;
+	}
+}
+
 Display.prototype.render = function(){
 	var now = Date.now();
 	if(this.client.room != null){
@@ -32,7 +47,7 @@ Display.prototype.render = function(){
 				var player = r.playingPlayers[i];
 				var interp = INTERPOLATION;
 				if(player.id == this.client.pID){
-					interp = 1000/FPS;
+					interp = Math.ceil(1000/FPS);
 				}
 				var carData = player.getInterpolatePosition(now, interp);
 				this.ctx.save();

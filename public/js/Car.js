@@ -19,7 +19,9 @@ var Car = function(json){
 	this.aSpeed = 0.45;
 	this.aaspeed = 0.1;
 	this.dASpeed = 0.2;
-	this.maxSpeed = 13.5;
+	this.onRoadSpeed = 13.5;
+	this.offRoadSpeed = 4;
+	this.maxSpeed = this.onRoadSpeed;
 	this.initASpeed = 0.45;
 	this.speedOnShow = 0;
 
@@ -63,6 +65,14 @@ Car.prototype.init = function(json){
 
 Car.prototype.update = function(inputs){
 	this.map = this.player.room.map;
+
+	//On check si in ou or route
+	if(this.map.isRoad(Math.floor(this.x), Math.floor(this.y))){
+		this.maxSpeed = this.onRoadSpeed;
+	}else{
+		this.maxSpeed = this.offRoadSpeed;
+	}
+
 	if(inputs.u){
 		this.moveUp();
 	}
@@ -110,7 +120,6 @@ Car.prototype.update = function(inputs){
 			this.player.endRace();
 		}
 	}
-
 }
 
 Car.prototype.slowDown = function(){

@@ -57,6 +57,7 @@ Client.prototype.initRoom = function(data){
 
 	if(data.map){
 		this.room.map = new Map(data.map);
+		this.display.loadRoadCollision();
 	}
 
 	for(var i in data.players){

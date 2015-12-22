@@ -111,11 +111,6 @@ Room.prototype.startingRace = function(){
 		this.map = game.maps[random(0, game.maps.length - 1)];
 	}
 
-	PNG.decode('public/maps/'+this.map.img, function(pixels) {
-		_this.map.mapPixels = pixels;
-	});
-
-
 	this.state = 1;
 	this.startRace = STARTTIME + Date.now();
 	this.endState = this.startRace + this.map.maxTime;

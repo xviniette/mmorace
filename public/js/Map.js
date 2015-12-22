@@ -2,6 +2,7 @@ var Map = function(json){
 	this.id;
 	this.name;
 	this.img;
+	this.roadCanvasctx = null;
 
 	this.mapPixels = [];
 
@@ -32,8 +33,16 @@ var Map = function(json){
 }
 
 Map.prototype.isRoad = function(x, y){
-	var index = (y*this.width + x) * 4
-	return (this.mapPixels[index] == 255);
+	if(isServer){
+		var index = (y*this.width + x) * 4
+		return (this.mapPixels[index] == 255);
+	}else{
+		if(this.roadCanvasctx != null){
+			var p = this.roadCanvasctx.getImageData(x, y, 1, 1).data;
+			return (p[0] == 255);	
+		}
+		return true;
+	}	
 }
 
 Map.prototype.pointInFinish = function(x, y){
@@ -44,6 +53,7 @@ Map.prototype.pointInFinish = function(x, y){
 }
 
 Map.prototype.parsing = function(){
+	var _this = this;
 	this.checkpoints = JSON.parse(this.checkpoints);
 	var max = 0;
 	for(var i in this.checkpoints){
@@ -55,6 +65,12 @@ Map.prototype.parsing = function(){
 
 	this.finish = JSON.parse(this.finish);
 	this.start = JSON.parse(this.start);
+
+	if(isServer){
+		PNG.decode('public/maps/'+this.img, function(pixels) {
+			_this.mapPixels = pixels;
+		});
+	}
 }
 
 Map.prototype.init = function(json){

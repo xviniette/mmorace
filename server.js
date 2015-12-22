@@ -59,9 +59,6 @@ var game = new Game();
 
 game.initMaps();
 
-
-
-
 //physic game
 setInterval(function(){
 	game.update();
