@@ -4,10 +4,12 @@ $(function(){
 	socket.on("login", function(data){
 		client.pID = null;
 		client.room = null;
+		$("#ConnectionPanel").show();
 	});
 
 	socket.on("playerID", function(data){
 		client.pID = data;
+		$("#ConnectionPanel").hide();
 	});
 
 	socket.on("playersStats", function(data){

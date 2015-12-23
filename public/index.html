@@ -8,11 +8,12 @@
 <body>	
 
 	Temps restant : <span id="cooldown"></span><br/>
-	<canvas id="canvas" width="1000" height="1000"></canvas>
+	<canvas id="canvas" width="1000" height="1000" hidden></canvas>
 	<canvas id="roadCollision" width="500" height="500" hidden></canvas>
 
 
-	<div id="ConnectionPanel">
+	<div id="ConnectionPanel" hidden>
+
 		Connexion
 		<form id="login">
 			<input type="text" palceholder="login" id="login_login">
@@ -27,7 +28,7 @@
 		</form>
 	</div>
 
-	<div id="lobby">
+	<div id="lobby" hidden>
 		<div id="lobbyPlayers"></div>
 		<form id="participate">
 			<select id="participate_map">
