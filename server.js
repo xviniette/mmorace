@@ -67,6 +67,12 @@ app.get( '/map/:id/' , function( req, res, next ) {
 	});
 });
 
+app.get( '/mapranking/:id/:min/:max' , function( req, res, next ) {
+	MysqlManager.getRankingMap(req.params.id, req.params.min, req.params.max, function(data){
+		res.json(data);
+	});
+});
+
 app.get( '/ranking/:type/:desc/:min/:max' , function( req, res, next ) {
 	MysqlManager.getRanking(req.params.type, req.params.desc, req.params.min, req.params.max, function(data){
 		res.json(data);

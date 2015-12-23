@@ -118,9 +118,8 @@ Mysql.prototype.addTemps = function(userid, raceid, time, elo, deltaelo, callbac
 }
 
 Mysql.prototype.getRankingMap = function(id, min, max, callback){
-	var requete = "SELECT u.id, u.pseudo, u.elo, u.xp, u.played, u.online, t.timestamp, t.date FROM times t, users u WHERE u.id = t.id_u AND t.id_m = "+id+" ORDER BY t.timestamp ASC ";
-	requete += "LIMIT "+min+", "+max+";";
-	this.db.query(requete, function(e, r, f){
+	var requete = "SELECT u.id, u.pseudo, u.elo, u.xp, u.online, t.timestamp FROM times t, races r, users u WHERE t.id_r = r.id AND r.id_m = ? AND t.id_u = u.id AND t.timestamp != -1 ORDER BY t.timestamp ASC;";
+	this.db.query(requete, [id, min, max], function(e, r, f){
 		callback(r);
 	});
 }
