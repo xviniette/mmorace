@@ -3,10 +3,10 @@ var isServer = false;
 var socket;
 
 var inputsKeyCode = {
-	r:[39],
-	l:[37],
-	u:[38],
-	d:[40],
+	r:[39, 68],
+	l:[37, 81, 65],
+	u:[38, 90, 87],
+	d:[40, 83],
 	b:[32]
 };
 
