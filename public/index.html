@@ -7,12 +7,9 @@
 </head>
 <body>	
 
-	Temps restant : <span id="cooldown"></span><br/>
-	<canvas id="canvas" width="1000" height="1000" hidden></canvas>
-	<canvas id="roadCollision" width="500" height="500" hidden></canvas>
 
 
-	<div id="ConnectionPanel" hidden>
+	<div id="ConnectionPanel">
 
 		Connexion
 		<form id="login">
@@ -28,8 +25,8 @@
 		</form>
 	</div>
 
-	<div id="lobby" hidden>
-		<div id="lobbyPlayers"></div>
+	<div id="lobby">
+		<div id="players"></div>
 		<form id="participate">
 			<select id="participate_map">
 			</select>
@@ -38,6 +35,16 @@
 		<div id="participatingPlayers"></div>
 	</div>
 
+	<div id="race">
+		<div id="cooldown"></div>
+		<canvas id="canvas" width="1000" height="1000"></canvas>
+		<canvas id="roadCollision" width="500" height="500"></canvas>
+		<div id="raceTimestamp"><div>
+		<div id="nblap"></div>
+		<canvas id="minimap"></canvas>
+		<div id="finish"></div>
+		<div id="ranking"></div>
+	<div>	
 
 	<script src="js/socketio.js"></script>
 	<script src="js/jquery.js"></script>

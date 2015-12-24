@@ -202,7 +202,18 @@ Room.prototype.update = function(){
 	}
 }
 
+Room.prototype.allPlayersFinish = function(){
+	for(var i in this.playingPlayers){
+		if(this.playingPlayers[i].time == null){
+			return false;
+		}
+	}
+	return true;
+}
+
 Room.prototype.serverLogic = function(){
+
+
 	var now = Date.now();
 	if(this.state == 1){
 		//course
@@ -210,7 +221,7 @@ Room.prototype.serverLogic = function(){
 		for(var i in this.playingPlayers){
 			this.playingPlayers[i].update();
 		}
-		if(this.endState < now){
+		if(this.endState < now || this.allPlayersFinish()){
 			this.endRace();
 		}
 	}else{
