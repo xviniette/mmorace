@@ -84,8 +84,17 @@ Player.prototype.endRace = function(){
 	if(isServer){
 		if(this.time == null){
 			this.time = this.getTimer();
+			var changeEndState = false;
+			var now = Date.now();
+			if(this.room.endState > now + this.room.map.maxInterval){
+				this.room.endState =  now + this.room.map.maxInterval;
+				changeEndState = true;
+			}
 			for(var i in this.room.players){
 				Utils.messageTo(this.room.players[i].socket, "timer", {id:this.id, time:this.time});
+				if(changeEndState){
+					Utils.messageTo(this.room.players[i].socket, "changeEndState", this.room.endState - now);
+				}
 			}
 		}
 	}
