@@ -50,8 +50,20 @@ Room.prototype.clear = function(){
 Room.prototype.getMaps = function(){
 	if(isServer){
 		this.selectableMaps = [];
-		for(var i in game.maps){
-			this.selectableMaps.push(game.maps[i]);
+		var nb = (NB_PROPOSITION_MAP > game.maps.length) ? game.maps.length : NB_PROPOSITION_MAP;
+		
+		while(this.selectableMaps.length < nb){
+			var mapSelected = game.maps[random(0, game.maps.length - 1)];
+			var toAdd = true;
+			for(var i in this.selectableMaps){
+				if(this.selectableMaps[i].id == mapSelected.id){
+					toAdd = false;
+					break;
+				}
+			}
+			if(toAdd){
+				this.selectableMaps.push(mapSelected);
+			}
 		}
 	}
 }
