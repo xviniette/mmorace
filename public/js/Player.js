@@ -86,8 +86,9 @@ Player.prototype.endRace = function(){
 			this.time = this.getTimer();
 			var changeEndState = false;
 			var now = Date.now();
+			//Prise en compte interval avec premier
 			if(this.room.endState > now + this.room.map.maxInterval){
-				this.room.endState =  now + this.room.map.maxInterval;
+				this.room.endState = now + this.room.map.maxInterval;
 				changeEndState = true;
 			}
 			for(var i in this.room.players){
