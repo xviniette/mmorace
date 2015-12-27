@@ -19,6 +19,8 @@ var Player = function(json){
 	this.nbInputs = 0;
 	this.nbInputsToExecute = 0;
 
+	this.lastTchatMessage = 0;
+
 	this.car;
 
 	this.init(json);

@@ -104,9 +104,11 @@ Utils.onInputs = function(data, socket){
 }
 
 Utils.onMessage = function(data, socket){
+	var deltaMessageTime = 2*1000;//2secondes
 	var p = game.getPlayerBySocket(socket.id);
 	if(!p){return;}
-	if(p.room){
+	if(p.room && p.registered && Date.now() - p.lastTchatMessage >= deltaMessageTime){
+		p.lastTchatMessage = Date.now();
 		var mess = {
 			id:p.id,
 			pseudo:p.pseudo,
