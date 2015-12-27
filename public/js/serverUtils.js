@@ -103,6 +103,21 @@ Utils.onInputs = function(data, socket){
 	}
 }
 
+Utils.onMessage = function(data, socket){
+	var p = game.getPlayerBySocket(socket.id);
+	if(!p){return;}
+	if(p.room){
+		var mess = {
+			id:p.id,
+			pseudo:p.pseudo,
+			msg:data
+		}
+		for(var i in p.room.players){
+			Utils.messageTo(p.room.players[i].socket, "msg", mess);			
+		}
+	}
+}
+
 Utils.onParticipate = function(data, socket){
 	var p = game.getPlayerBySocket(socket.id);
 	if(!p){return;}

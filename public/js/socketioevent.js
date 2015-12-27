@@ -51,6 +51,10 @@ $(function(){
 		console.log(data);
 	});
 
+	socket.on("msg", function(data){
+		console.log(data);
+		addMessage(data);
+	});
 
 	socket.on("newPlayer", function(data){
 		client.room.addPlayer(new Player(data));

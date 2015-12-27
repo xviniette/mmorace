@@ -119,6 +119,10 @@ io.on('connection', function(socket){
 		Utils.onLogin(data, socket);
 	});
 
+	socket.on("msg", function(data){
+		Utils.onMessage(data, socket);
+	});
+
 	socket.on("inputs", function(data){
 		Utils.onInputs(data, socket);
 	});

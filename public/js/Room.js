@@ -285,7 +285,7 @@ Room.prototype.deletePlayer = function(p){
 			}
 		}
 		if(this.players.length == 0){
-			game.deleteRoom(this.id);
+//			game.deleteRoom(this.id);
 		}
 	}
 	return del;

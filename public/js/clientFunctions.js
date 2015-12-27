@@ -61,3 +61,16 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
         }
     }
 }
+
+function loadEmoji(min, max){
+	var html = '';
+	for(var i = min; i <= max; i++){
+		html += '<img class="emoji" val="'+i+'" src="img/emoji/'+i+'.png">';
+	}
+	document.getElementById("emoji").innerHTML = html;
+}
+
+function addMessage(mess){
+	var image = '<img src="img/emoji/'+mess.msg+'.png">';
+	$("#messages").append('<li>'+mess.pseudo+' : '+image+'</li>');
+}

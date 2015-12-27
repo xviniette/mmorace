@@ -1,4 +1,5 @@
 $(function(){
+	loadEmoji(1, 18);
 	document.body.addEventListener("keydown", function(e) {
 		if($('input:focus').length == 0){
 			for(var i in inputsKeyCode){
@@ -22,6 +23,14 @@ $(function(){
 			}
 		}
 	});
+
+	var emojis = document.getElementsByClassName("emoji");
+	for(var i in emojis){
+		emojis[i].onclick = function(){
+			var value = this.attributes["val"].value;
+			socket.emit("msg", parseInt(value));
+		}		
+	}
 
 	//CONNEXION
 	$("#login").submit(function(e){

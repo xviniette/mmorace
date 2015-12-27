@@ -47,13 +47,11 @@ Game.prototype.deleteRoom = function(roomId){
 
 Game.prototype.getAvailableRoom = function(){
 	if(this.rooms.length == 0){
-		this.newRoom();
+		return this.newRoom();
 	}
 
 	for(var i in this.rooms){
-		if(this.rooms[i].players.length <= 1000){
-			return this.rooms[i];
-		}
+		return this.rooms[i];
 	}
 }
 
