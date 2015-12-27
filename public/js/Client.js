@@ -56,8 +56,9 @@ Client.prototype.initRoom = function(data){
 	this.room.playingPlayers = [];
 
 	if(data.map){
-		this.room.map = new Map(data.map);
-		this.display.loadRoadCollision();
+		var m = new Map(data.map);
+		this.room.map = m;
+		this.display.loadMap(m);
 	}
 
 	for(var i in data.players){
@@ -71,6 +72,9 @@ Client.prototype.initRoom = function(data){
 		if(data.playingPlayers[i].car){
 			data.playingPlayers[i].car.player = pp;
 			pp.car = new Car(data.playingPlayers[i].car);
+		}
+		if(data.playingPlayers[i].skin){
+			this.display.loadSkin(data.playingPlayers[i].skin);
 		}
 		this.room.playingPlayers.push(pp);
 	}

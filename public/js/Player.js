@@ -23,6 +23,8 @@ var Player = function(json){
 
 	this.car;
 
+	this.skin;
+
 	this.init(json);
 }
 
@@ -125,8 +127,11 @@ Player.prototype.getInit = function(){
 		data.car = {
 			x:Math.round(this.car.x),
 			y:Math.round(this.car.y),
-			rotation:Math.round(radtodeg(this.car.rotation))
+			rotation:Math.round(radtodeg(this.car.rotation)),
+			nbLap:this.car.nbLap,
+			lastCheckpoint:this.car.lastCheckpoint
 		}
+		data.skin = this.skin;
 	}
 	return data;
 }
@@ -141,4 +146,15 @@ Player.prototype.getSnapshot = function(){
 		}
 	}
 	return null;
+}
+
+Player.prototype.getRankingInfo = function(){
+	return {
+		id:this.id,
+		pseudo:this.pseudo,
+		elo:this.elo,
+		deltaElo:this.deltaElo,
+		time:this.time,
+		registered:this.registered
+	};
 }

@@ -97,15 +97,17 @@ var isServer = true;
 var game = new Game();
 
 game.initMaps();
+game.initSkins();
 
 //physic game
 setInterval(function(){
 	game.update();
 }, 1000/FPS);
-
+/*
 setInterval(function(){
 	game.initMaps();
-}, 1000 * 60);
+	game.initSkins();
+}, 1000 * 60);*/
 
 io.on('connection', function(socket){
 	socket.emit("login", true);

@@ -31,6 +31,36 @@ $(function(){
 		client.display.setSelectableMaps(client.room.selectableMaps);
 	});
 
+	socket.on("update", function(data){
+		if(data.endState != null){
+			data.endState = Date.now() + data.endState;
+		}
+		if(data.startRace != null){
+			data.startRace = Date.now() + data.startRace;
+		}
+
+		for(var i in data.playingPlayers){
+			data.playingPlayers[i].room = client.room;
+			data.playingPlayers[i] = new Player(data.playingPlayers[i]);
+			if(data.playingPlayers[i].car){
+				data.playingPlayers[i].car.player = data.playingPlayers[i];
+				data.playingPlayers[i].car = new Car(data.playingPlayers[i].car);
+			}
+			if(data.playingPlayers[i].skin){
+				client.display.loadSkin(data.playingPlayers[i].skin);
+			}
+		}
+
+		client.room.init(data);
+
+		if(data.map){
+			var m = new Map(data.map);
+			client.room.map = m;
+			client.display.loadMap(m);
+		}
+
+	});
+
 	socket.on("snapshot", function(data){
 		client.onSnapshot(data);
 	});
@@ -48,6 +78,10 @@ $(function(){
 	});
 
 	socket.on("timer", function(data){
+		console.log(data);
+	});
+
+	socket.on("ranking", function(data){
 		console.log(data);
 	});
 

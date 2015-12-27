@@ -43,6 +43,7 @@ Room.prototype.clear = function(){
 	this.state = 0;
 	this.endState = null;
 	this.startRace = null;
+	this.map = null;
 
 	this.getMaps();	
 }
@@ -90,6 +91,8 @@ Room.prototype.participate = function(player, map){
 				this.mapPoll.push(0);
 			}
 			//Ajout joueur
+			//On attribue le skin
+			player.skin = game.skins[0];
 			this.playingPlayers.push(player);
 			if(isServer){
 				//On prévient tout le monde du nouveau joueur
@@ -123,6 +126,7 @@ Room.prototype.startingRace = function(){
 		this.map = game.maps[random(0, game.maps.length - 1)];
 	}
 
+
 	this.state = 1;
 	this.startRace = STARTTIME + Date.now();
 	this.endState = this.startRace + this.map.maxTime;
@@ -132,8 +136,12 @@ Room.prototype.startingRace = function(){
 	}
 
 	var initInfos = this.getInitInfo();
+	delete initInfos.players;
+	delete initInfos.selectableMaps;
+	delete initInfos.mapPoll;
+
 	for(var i in this.players){
-		Utils.messageTo(this.players[i].socket, "init", initInfos);
+		Utils.messageTo(this.players[i].socket, "update", initInfos);
 	}
 }
 
@@ -141,6 +149,8 @@ Room.prototype.endRace = function(){
 	this.state = 0;
 	this.endState = null;
 	this.startRace = null;
+
+	var ranking = {};
 	//CALCUL ELO
 	var _this = this;
 	for(var i = 0; i < this.playingPlayers.length; i++){
@@ -170,24 +180,55 @@ Room.prototype.endRace = function(){
 		}
 	}
 
+	//RANKING
+	ranking.players = [];
+	for(var i = 0; i < this.playingPlayers.length; i++){
+		//calcul ELO
+		if(this.playingPlayers[i].registered){
+			this.playingPlayers[i].played++;
+			var deltaElo = 0;
+			if(this.playingPlayers[i].totalEloCompare > 0){
+				deltaElo = Math.round(Elo.getK(this.playingPlayers[i].elo) * this.playingPlayers[i].deltaElo/this.playingPlayers[i].totalEloCompare);
+			}
+			this.playingPlayers[i].deltaElo = deltaElo;
+		}
+		if(i == 0){
+			ranking.players.push(this.playingPlayers[i].getRankingInfo());
+		}else{
+			for(var j = 0; j < ranking.players.length; j++){
+				if(this.playingPlayers[i].time != null && ranking.players[j].time != null){
+					if(this.playingPlayers[i].time < ranking.players[j].time){
+						break;
+					}
+				}else if(this.playingPlayers[i].time != null && ranking.players[j].time == null){
+					break;
+				}
+			}
+			ranking.players.splice(j-1, 0, this.playingPlayers[i].getRankingInfo());
+		}
+		if(this.playingPlayers[i].registered){
+			this.playingPlayers[i].elo += deltaElo;
+		}
+	}
+
+	for(var i in this.players){
+		Utils.messageTo(this.players[i].socket, "ranking", ranking);
+	}
+
 	//On crée la race database
 	MysqlManager.addRace(this.map.id, function(raceId){
 		for(var i in _this.playingPlayers){
 			if(_this.playingPlayers[i].registered){
-				_this.playingPlayers[i].played++;
-				var deltaElo = 0;
-				if(_this.playingPlayers[i].totalEloCompare > 0){
-					deltaElo += Math.round(Elo.getK(_this.playingPlayers[i].elo) * _this.playingPlayers[i].deltaElo/_this.playingPlayers[i].totalEloCompare);
-				}
 				MysqlManager.addTemps(_this.playingPlayers[i].id, raceId, (_this.playingPlayers[i].time == null) ? -1 : _this.playingPlayers[i].time, _this.playingPlayers[i].elo, deltaElo, function(){});
-				_this.playingPlayers[i].elo += deltaElo;
 				MysqlManager.updateUser({elo:_this.playingPlayers[i].elo, played:_this.playingPlayers[i].played}, _this.playingPlayers[i].id, function(){});
 			}
 		}
 		_this.clear();
 		var initMessage = _this.getInitInfo();
+		delete initMessage.players;
+
 		for(var i in _this.players){
-			Utils.messageTo(_this.players[i].socket, "init", initMessage);
+			Utils.messageTo(_this.players[i].socket, "update", initMessage);
 		}
 	}); 
 }

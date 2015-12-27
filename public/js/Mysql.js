@@ -154,3 +154,12 @@ Mysql.prototype.getMaps = function(callback){
 		callback(r);
 	});
 }
+
+//SKINS
+
+Mysql.prototype.getSkins = function(callback){
+	var requete = "SELECT * FROM skins;";
+	this.db.query(requete, function(e, r, f){
+		callback(r);
+	});
+}

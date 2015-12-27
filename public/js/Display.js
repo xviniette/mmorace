@@ -4,20 +4,42 @@ var Display = function(id, client){
 	this.ctx = this.canvas.getContext("2d");
 
 	this.client = client;
+
+	this.skins = {};
+	this.maps = {};
 }
 
-Display.prototype.loadRoadCollision = function(){
-	var map = this.client.room.map;
-	var canvas = document.getElementById("roadCollision");
-	var ctx = canvas.getContext("2d");
-	var img = new Image(); 
-	img.src = "img/maps/paths/"+map.img;
-	console.log(img.src);
-	img.onload = function(){
-		canvas.width = map.width;
-		canvas.height = map.height;
-		ctx.drawImage(img, 0, 0);
-		map.roadCanvasctx = ctx;
+Display.prototype.loadSkin = function(skin){
+	var _this = this;
+	if(!this.skins[skin.id]){
+		skin.image = new Image();
+		skin.image.src = "img/skins/"+skin.img;
+		skin.image.onload = function(){
+			_this.skins[skin.id] = skin;
+		}
+	}
+}
+
+Display.prototype.loadMap = function(map){
+	var _this = this;
+	if(!this.maps[map.id]){
+		map.decorOk = false;
+		map.path = new Image();
+		map.decor = new Image();
+		map.path.src = "img/maps/paths/"+map.img;
+		map.decor.src = "img/maps/decors/"+map.img;
+		map.path.onload = function(){
+			var canvas = document.getElementById("roadCollision");
+			var ctx = canvas.getContext("2d");
+			canvas.width = map.width;
+			canvas.height = map.height;
+			ctx.drawImage(map.path, 0, 0);
+			map.roadCanvasctx = ctx;
+			_this.maps[map.id] = map;
+		}
+		map.decor.onload = function(){
+			map.decorOk = true;
+		}
 	}
 }
 
@@ -29,8 +51,12 @@ Display.prototype.render = function(){
 			//en course
 			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-
 			var map = r.map;
+			if(this.maps[map.id] && this.maps[map.id].decorOk){
+				this.ctx.drawImage(this.maps[map.id].decor, 0, 0, map.width, map.height);
+			}
+
+
 			//Affichages checkpoints
 			this.ctx.strokeStyle = "blue";
 			for(var i in map.checkpoints){
@@ -54,14 +80,16 @@ Display.prototype.render = function(){
 				this.ctx.translate(carData.x, carData.y); 
 				this.ctx.rotate(carData.rotation); 
 
-				var largeur = 40;
-				var longueur = 20;
-				this.ctx.fillStyle = "black";
-				this.ctx.fillRect(-largeur/2, -longueur/2, largeur, longueur);
-				this.ctx.fillStyle = "red";
-				var largD = largeur/4;
-				var longD = longueur;
-				this.ctx.fillRect(largeur/2-largD, -longueur/2, largD, longueur);
+				if(this.skins[player.skin.id]){
+					var dx = Math.round(player.skin.rWidth/player.skin.width * player.skin.centerx);
+					var dy = Math.round(player.skin.rHeight/player.skin.height * player.skin.centery);
+
+					this.ctx.drawImage(this.skins[player.skin.id].image, player.skin.x, player.skin.y, player.skin.width, player.skin.height, -dx, -dy, player.skin.rWidth, player.skin.rHeight);
+				}
+
+				this.ctx.fillStyle = "blue";
+				this.ctx.fillRect(-2, -2, 4, 4);
+				
 
 				this.ctx.restore();
 			}

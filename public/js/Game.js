@@ -3,15 +3,27 @@ var Game = function(){
 	this.rooms = [];
 
 	this.maps = [];
+	this.skins = [];
 }
 
 Game.prototype.initMaps = function(){
 	_this = this;
 	MysqlManager.getMaps(function(res){
+		console.log("Chargement des maps : OK");
 		for(var i in res){
 			var m = new Map(res[i]);
 			m.parsing();
 			_this.maps.push(m);
+		}
+	});
+}
+
+Game.prototype.initSkins = function(){
+	_this = this;
+	MysqlManager.getSkins(function(res){
+		console.log("Chargement des skins : OK");
+		for(var i in res){
+			_this.skins.push(res[i]);
 		}
 	});
 }
