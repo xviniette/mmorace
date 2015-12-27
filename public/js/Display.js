@@ -11,7 +11,7 @@ Display.prototype.loadRoadCollision = function(){
 	var canvas = document.getElementById("roadCollision");
 	var ctx = canvas.getContext("2d");
 	var img = new Image(); 
-	img.src = "maps/"+map.img;
+	img.src = "img/maps/paths/"+map.img;
 	console.log(img.src);
 	img.onload = function(){
 		canvas.width = map.width;

@@ -138,11 +138,11 @@ Room.prototype.startingRace = function(){
 }
 
 Room.prototype.endRace = function(){
-	var _this = this;
 	this.state = 0;
 	this.endState = null;
 	this.startRace = null;
 	//CALCUL ELO
+	var _this = this;
 	for(var i = 0; i < this.playingPlayers.length; i++){
 		for(var j = i + 1; j < this.playingPlayers.length; j++){
 			if(this.playingPlayers[i].registered && this.playingPlayers[j].registered){
@@ -189,7 +189,7 @@ Room.prototype.endRace = function(){
 		for(var i in _this.players){
 			Utils.messageTo(_this.players[i].socket, "init", initMessage);
 		}
-	});
+	}); 
 }
 
 Room.prototype.update = function(){
@@ -224,8 +224,6 @@ Room.prototype.allPlayersFinish = function(){
 }
 
 Room.prototype.serverLogic = function(){
-
-
 	var now = Date.now();
 	if(this.state == 1){
 		//course
@@ -285,7 +283,7 @@ Room.prototype.deletePlayer = function(p){
 			}
 		}
 		if(this.players.length == 0){
-//			game.deleteRoom(this.id);
+			game.deleteRoom(this.id);
 		}
 	}
 	return del;

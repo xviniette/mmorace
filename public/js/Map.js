@@ -67,7 +67,7 @@ Map.prototype.parsing = function(){
 	this.start = JSON.parse(this.start);
 
 	if(isServer){
-		PNG.decode('public/maps/'+this.img, function(pixels) {
+		PNG.decode('public/img/maps/paths/'+this.img, function(pixels) {
 			_this.mapPixels = pixels;
 		});
 	}
