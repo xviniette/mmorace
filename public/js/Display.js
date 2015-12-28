@@ -22,24 +22,31 @@ Display.prototype.loadSkin = function(skin){
 
 Display.prototype.loadMap = function(map){
 	var _this = this;
+	var canvas = document.getElementById("roadCollision");
+	var ctx = canvas.getContext("2d");
 	if(!this.maps[map.id]){
+		console.log("ok");
 		map.decorOk = false;
 		map.path = new Image();
 		map.decor = new Image();
 		map.path.src = "img/maps/paths/"+map.img;
 		map.decor.src = "img/maps/decors/"+map.img;
 		map.path.onload = function(){
-			var canvas = document.getElementById("roadCollision");
-			var ctx = canvas.getContext("2d");
 			canvas.width = map.width;
 			canvas.height = map.height;
 			ctx.drawImage(map.path, 0, 0);
-			map.roadCanvasctx = ctx;
+			_this.client.room.map.roadCanvasctx = ctx;
 			_this.maps[map.id] = map;
 		}
 		map.decor.onload = function(){
 			map.decorOk = true;
 		}
+	}else{
+		map = this.maps[map.id];
+		canvas.width = map.width;
+		canvas.height = map.height;
+		ctx.drawImage(map.path, 0, 0);
+		_this.client.room.map.roadCanvasctx = ctx;
 	}
 }
 

@@ -5,3 +5,7 @@ body{
 canvas{
   border: 1px solid black;
 }
+
+#roadCollision{
+	background-color: black;
+}

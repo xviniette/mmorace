@@ -74,7 +74,7 @@ Player.prototype.getInterpolatePosition = function(t, interp){
 }
 
 Player.prototype.getTimer = function(){
-	return Math.round(this.room.deltaTime * 1000 * this.nbInputs);
+	return Math.floor(this.room.deltaTime * 1000) * this.nbInputs;
 }
 
 Player.prototype.spawn = function(map){
