@@ -150,7 +150,6 @@ Room.prototype.endRace = function(){
 	this.endState = null;
 	this.startRace = null;
 
-	var ranking = {};
 	//CALCUL ELO
 	var _this = this;
 	for(var i = 0; i < this.playingPlayers.length; i++){
@@ -180,37 +179,23 @@ Room.prototype.endRace = function(){
 		}
 	}
 
-	//RANKING
+	var ranking = {};
 	ranking.players = [];
-	for(var i = 0; i < this.playingPlayers.length; i++){
-		//calcul ELO
-		if(this.playingPlayers[i].registered){
-			this.playingPlayers[i].played++;
-			var deltaElo = 0;
-			if(this.playingPlayers[i].totalEloCompare > 0){
-				deltaElo = Math.round(Elo.getK(this.playingPlayers[i].elo) * this.playingPlayers[i].deltaElo/this.playingPlayers[i].totalEloCompare);
-			}
-			this.playingPlayers[i].deltaElo = deltaElo;
-		}
-		if(i == 0){
-			ranking.players.push(this.playingPlayers[i].getRankingInfo());
+	for(var i in this.playingPlayers){
+		if(this.playingPlayers[i].registered && this.playingPlayers[i].totalEloCompare > 0){
+			this.playingPlayers[i].deltaElo = Math.round(Elo.getK(this.playingPlayers[i].elo) * this.playingPlayers[i].deltaElo/this.playingPlayers[i].totalEloCompare);
 		}else{
-			for(var j = 0; j < ranking.players.length; j++){
-				if(this.playingPlayers[i].time != null && ranking.players[j].time != null){
-					if(this.playingPlayers[i].time < ranking.players[j].time){
-						break;
-					}
-				}else if(this.playingPlayers[i].time != null && ranking.players[j].time == null){
-					break;
-				}
-			}
-			ranking.players.splice(j-1, 0, this.playingPlayers[i].getRankingInfo());
+			this.playingPlayers[i].deltaElo = 0;
 		}
-		if(this.playingPlayers[i].registered){
-			this.playingPlayers[i].elo += deltaElo;
+		if(this.playingPlayers[i].time == null){
+			this.playingPlayers[i].time = -1;
 		}
+		ranking.players.push(this.playingPlayers[i].getRankingInfo());
 	}
 
+	ranking.players = orderBy(ranking.players, "time", false);
+
+	//On envoit le classement a tout le monde
 	for(var i in this.players){
 		Utils.messageTo(this.players[i].socket, "ranking", ranking);
 	}
@@ -219,7 +204,10 @@ Room.prototype.endRace = function(){
 	MysqlManager.addRace(this.map.id, function(raceId){
 		for(var i in _this.playingPlayers){
 			if(_this.playingPlayers[i].registered){
-				MysqlManager.addTemps(_this.playingPlayers[i].id, raceId, (_this.playingPlayers[i].time == null) ? -1 : _this.playingPlayers[i].time, _this.playingPlayers[i].elo, deltaElo, function(){});
+				MysqlManager.addTemps(_this.playingPlayers[i].id, raceId, (_this.playingPlayers[i].time == null) ? -1 : _this.playingPlayers[i].time, _this.playingPlayers[i].elo, _this.playingPlayers[i].deltaElo, function(){});
+				
+				_this.playingPlayers[i].elo += _this.playingPlayers[i].deltaElo;
+
 				MysqlManager.updateUser({elo:_this.playingPlayers[i].elo, played:_this.playingPlayers[i].played}, _this.playingPlayers[i].id, function(){});
 			}
 		}
