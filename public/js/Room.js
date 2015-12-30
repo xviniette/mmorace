@@ -207,6 +207,7 @@ Room.prototype.endRace = function(){
 				MysqlManager.addTemps(_this.playingPlayers[i].id, raceId, (_this.playingPlayers[i].time == null) ? -1 : _this.playingPlayers[i].time, _this.playingPlayers[i].elo, _this.playingPlayers[i].deltaElo, function(){});
 				
 				_this.playingPlayers[i].elo += _this.playingPlayers[i].deltaElo;
+				_this.playingPlayers[i].played++;
 
 				MysqlManager.updateUser({elo:_this.playingPlayers[i].elo, played:_this.playingPlayers[i].played}, _this.playingPlayers[i].id, function(){});
 			}
