@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Lun 28 Décembre 2015 à 20:57
+-- Généré le :  Jeu 31 Décembre 2015 à 18:37
 -- Version du serveur :  10.1.9-MariaDB
 -- Version de PHP :  5.5.30
 
@@ -19,6 +19,17 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `smk`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `cases`
+--
+
+CREATE TABLE `cases` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -65,13 +76,7 @@ CREATE TABLE `races` (
 --
 
 INSERT INTO `races` (`id`, `id_m`, `date`) VALUES
-(1, 2, 1451323363),
-(2, 1, 1451324873),
-(3, 1, 1451324900),
-(4, 2, 1451324919),
-(5, 1, 1451324936),
-(6, 2, 1451325048),
-(7, 2, 1451325069);
+(1, 1, 1451512374);
 
 -- --------------------------------------------------------
 
@@ -121,13 +126,20 @@ CREATE TABLE `times` (
 --
 
 INSERT INTO `times` (`id`, `id_u`, `id_r`, `timestamp`, `oldElo`, `deltaElo`) VALUES
-(1, 24, 1, 3564, 1005, 0),
-(2, 24, 2, 2310, 1005, 0),
-(3, 24, 3, 2508, 1005, 0),
-(4, 24, 4, 4092, 1005, 0),
-(5, 24, 5, 2409, 1005, 0),
-(6, 24, 6, 6897, 1005, 0),
-(7, 24, 7, 6831, 1005, 0);
+(1, 1, 1, 2310, 1000, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `usercase`
+--
+
+CREATE TABLE `usercase` (
+  `id` int(11) NOT NULL,
+  `id_u` int(11) DEFAULT NULL,
+  `id_c` int(11) DEFAULT NULL,
+  `soldPrice` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -145,18 +157,19 @@ CREATE TABLE `users` (
   `played` int(11) DEFAULT NULL,
   `registration_time` int(11) DEFAULT NULL,
   `connection_time` int(11) DEFAULT NULL,
-  `online` tinyint(1) DEFAULT NULL
+  `online` tinyint(1) DEFAULT NULL,
+  `nbskintodrop` int(11) DEFAULT NULL,
+  `skindropin` int(11) DEFAULT NULL,
+  `nbcasetodrop` int(11) DEFAULT NULL,
+  `casedropin` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `users`
 --
 
-INSERT INTO `users` (`id`, `pseudo`, `password`, `email`, `elo`, `xp`, `played`, `registration_time`, `connection_time`, `online`) VALUES
-(24, 'aze', '9adfb0a6d03beb7141d8ec2708d6d9fef9259d12cd230d50f70fb221ae6cabd5', NULL, 1005, 0, 260, 1450546253, 1451332611, 0),
-(25, 'qsd', '0b1b8e9fc13fa4c07a6d7983ee14619bd71f2ea4001c2c6dba9ab79da4920d5c', NULL, 965, 0, 30, 1450546261, 1451321608, 0),
-(26, 'wxc', '312f9d6d8559d52ebff1dc501db57b29b96afb9aabb8d6293aa30f8f43c8f3b0', NULL, 1003, 0, 2, 1450546270, 1450720903, 0),
-(27, 'ElGringo', '2c1b8795c15edcb9b85814709980664fdae43b7f074c9c63279da2f415973848', NULL, 1000, 0, 1, 1451239132, 1451244704, 0);
+INSERT INTO `users` (`id`, `pseudo`, `password`, `email`, `elo`, `xp`, `played`, `registration_time`, `connection_time`, `online`, `nbskintodrop`, `skindropin`, `nbcasetodrop`, `casedropin`) VALUES
+(1, 'ElBazia', '9adfb0a6d03beb7141d8ec2708d6d9fef9259d12cd230d50f70fb221ae6cabd5', NULL, 1000, 0, 1, 1451512317, 1451512378, 0, 2, 4, 2, 6);
 
 -- --------------------------------------------------------
 
@@ -174,6 +187,12 @@ CREATE TABLE `userskin` (
 --
 -- Index pour les tables exportées
 --
+
+--
+-- Index pour la table `cases`
+--
+ALTER TABLE `cases`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `maps`
@@ -200,6 +219,12 @@ ALTER TABLE `times`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `usercase`
+--
+ALTER TABLE `usercase`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `users`
 --
 ALTER TABLE `users`
@@ -216,6 +241,11 @@ ALTER TABLE `userskin`
 --
 
 --
+-- AUTO_INCREMENT pour la table `cases`
+--
+ALTER TABLE `cases`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT pour la table `maps`
 --
 ALTER TABLE `maps`
@@ -224,7 +254,7 @@ ALTER TABLE `maps`
 -- AUTO_INCREMENT pour la table `races`
 --
 ALTER TABLE `races`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT pour la table `skins`
 --
@@ -234,12 +264,17 @@ ALTER TABLE `skins`
 -- AUTO_INCREMENT pour la table `times`
 --
 ALTER TABLE `times`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT pour la table `usercase`
+--
+ALTER TABLE `usercase`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT pour la table `userskin`
 --
