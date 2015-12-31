@@ -8,6 +8,11 @@ var Player = function(json){
 	this.xp = 0;
 	this.played = 0;
 	this.registered = false;
+	
+	this.nbskintodrop = 0;
+	this.nbcasetodrop = 0;
+	this.skindropin = 0;
+	this.casedropin = 0;
 
 	this.deltaElo = 0;
 	this.totalEloCompare = 0;

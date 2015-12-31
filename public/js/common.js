@@ -33,6 +33,21 @@ var random = function(min, max){
 	return Math.round(Math.random() * (max - min) + min);
 }
 
+var normalRandom = function(n){
+	var somme = 0;
+	for(var i = 0; i < n; i++){
+		somme += Math.random();
+	}
+	return ((somme - n/2)/(n/2));
+}
+
+var randomNormalized = function(n, centre, borne){
+	var rd = normalRandom(n);
+	var interval = borne * 2 + 1;
+	//FINIR
+	return centre + Math.floor(rd/interval); 
+}
+
 var degtorad = function(deg){
 	return deg * Math.PI / 180;
 }
