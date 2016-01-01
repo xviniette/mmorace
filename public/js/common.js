@@ -38,14 +38,14 @@ var normalRandom = function(n){
 	for(var i = 0; i < n; i++){
 		somme += Math.random();
 	}
-	return ((somme - n/2)/(n/2));
+	return (somme/n);
 }
 
 var randomNormalized = function(n, centre, borne){
 	var rd = normalRandom(n);
-	var interval = borne * 2 + 1;
-	//FINIR
-	return centre + Math.floor(rd/interval); 
+	var interval = 1/(borne * 2 + 1);
+	var nb = Math.floor(rd/interval);
+	return centre + (nb - borne);
 }
 
 var degtorad = function(deg){

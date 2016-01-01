@@ -15,3 +15,33 @@ var STARTTIME = 2 * 1000;
 
 
 var NB_PROPOSITION_MAP = 3;
+
+
+//DROP CARAC
+var NB_SKINS_WEEK = 2;
+
+var SKINS_DROP_INIT = {
+	n:5,
+	center:10,
+	bornes:5
+};
+
+var SKINS_DROP = {
+	n:5,
+	center:10,
+	bornes:5
+};
+
+var NB_CASES_WEEK = 2;
+
+var CASES_DROP_INIT = {
+	n:5,
+	center:20,
+	bornes:5
+};
+
+var CASES_DROP = {
+	n:5,
+	center:10,
+	bornes:5
+};

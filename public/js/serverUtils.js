@@ -24,7 +24,11 @@ Utils.onLogin = function(data, socket){
 					elo:res.elo,
 					xp:res.xp,
 					played:res.played,
-					registered:true
+					registered:true,
+					nbskintodrop:res.nbskintodrop,
+					skindropin:res.skindropin,
+					nbcasetodrop:res.nbcasetodrop,
+					casedropin:res.casedropin
 				}
 				p = new Player(d);
 
@@ -83,7 +87,11 @@ Utils.onSignin = function(data, socket){
 					played:0,
 					registration_time:Math.floor(Date.now()/1000),
 					connection_time:0,
-					online:false
+					online:false,
+					nbskintodrop:NB_SKINS_WEEK,
+					skindropin:randomNormalized(SKINS_DROP_INIT.n, SKINS_DROP_INIT.center, SKINS_DROP_INIT.bornes),
+					nbcasetodrop:NB_CASES_WEEK,
+					casedropin:randomNormalized(CASES_DROP_INIT.n, CASES_DROP_INIT.center, CASES_DROP_INIT.bornes)
 				}
 				MysqlManager.addUser(d, function(){
 					_this.onLogin(data, socket);

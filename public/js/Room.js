@@ -180,8 +180,37 @@ Room.prototype.endRace = function(){
 	}
 
 	var ranking = {};
+	ranking.drops = [];
 	ranking.players = [];
 	for(var i in this.playingPlayers){
+		//DROPS
+		if(this.playingPlayers[i].registered && this.playingPlayers[i].time != null){
+			//skin
+			if(this.playingPlayers[i].nbskintodrop > 0){
+				if(this.playingPlayers[i].skindropin <= 0){
+					//drop de skin
+					console.log("drop");
+					this.playingPlayers[i].nbskintodrop--;
+					this.playingPlayers[i].skindropin = randomNormalized(SKINS_DROP.n, SKINS_DROP.center, SKINS_DROP.bornes);
+				}else{
+					//on décompte
+					this.playingPlayers[i].skindropin--;
+				}
+			}
+			//caisse
+			if(this.playingPlayers[i].nbcasetodrop > 0){
+				if(this.playingPlayers[i].casedropin <= 0){
+					//drop de caisse
+					console.log("drop");
+					this.playingPlayers[i].nbcasetodrop--;
+					this.playingPlayers[i].casedropin = randomNormalized(CASES_DROP.n, CASES_DROP.center, CASES_DROP.bornes);
+				}else{
+					//on décompte
+					this.playingPlayers[i].casedropin--;
+				}
+			}
+		}
+		//classement
 		if(this.playingPlayers[i].registered && this.playingPlayers[i].totalEloCompare > 0){
 			this.playingPlayers[i].deltaElo = Math.round(Elo.getK(this.playingPlayers[i].elo) * this.playingPlayers[i].deltaElo/this.playingPlayers[i].totalEloCompare);
 		}else{
@@ -208,8 +237,16 @@ Room.prototype.endRace = function(){
 				
 				_this.playingPlayers[i].elo += _this.playingPlayers[i].deltaElo;
 				_this.playingPlayers[i].played++;
+				var updateuserdata = {
+					elo:_this.playingPlayers[i].elo, 
+					played:_this.playingPlayers[i].played,
+					nbskintodrop:_this.playingPlayers[i].nbskintodrop,
+					nbcasetodrop:_this.playingPlayers[i].nbcasetodrop,
+					skindropin:_this.playingPlayers[i].skindropin,
+					casedropin:_this.playingPlayers[i].casedropin
+				};
 
-				MysqlManager.updateUser({elo:_this.playingPlayers[i].elo, played:_this.playingPlayers[i].played}, _this.playingPlayers[i].id, function(){});
+				MysqlManager.updateUser(updateuserdata, _this.playingPlayers[i].id, function(){});
 			}
 		}
 		_this.clear();
