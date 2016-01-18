@@ -92,7 +92,7 @@ Room.prototype.participate = function(player, map){
 			}
 			//Ajout joueur
 			//On attribue le skin
-			player.skin = game.skins[0];
+			player.skin = game.skins[1];
 			this.playingPlayers.push(player);
 			if(isServer){
 				//On prévient tout le monde du nouveau joueur
