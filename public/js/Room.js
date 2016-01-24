@@ -54,7 +54,7 @@ Room.prototype.getMaps = function(){
 		var nb = (NB_PROPOSITION_MAP > game.maps.length) ? game.maps.length : NB_PROPOSITION_MAP;
 		
 		while(this.selectableMaps.length < nb){
-			var mapSelected = game.maps[random(0, game.maps.length - 1)];
+			var mapSelected = game.maps[random(0, game.maps.length)];
 			var toAdd = true;
 			for(var i in this.selectableMaps){
 				if(this.selectableMaps[i].id == mapSelected.id){
@@ -69,7 +69,7 @@ Room.prototype.getMaps = function(){
 	}
 }
 
-Room.prototype.participate = function(player, map){
+Room.prototype.participate = function(player, map, skin){
 	if(this.state == 0){
 		var alreadyIn = false;
 		for(var i in this.playingPlayers){
@@ -92,7 +92,16 @@ Room.prototype.participate = function(player, map){
 			}
 			//Ajout joueur
 			//On attribue le skin
-			player.skin = game.skins[1];
+			player.skin = Drops.skins[-1][0];
+			//default skin
+			if(skin){
+				//Si demande de skin -> vérification possession
+				var userSkin = player.getSkin(skin);
+				if(userSkin != null){
+					player.skin = userSkin;
+				}
+			}
+
 			this.playingPlayers.push(player);
 			if(isServer){
 				//On prévient tout le monde du nouveau joueur
@@ -113,7 +122,7 @@ Room.prototype.participate = function(player, map){
 
 Room.prototype.startingRace = function(){
 	var _this = this;
-	var map = this.mapPoll[random(0, this.mapPoll.length-1)];
+	var map = this.mapPoll[random(0, this.mapPoll.length)];
 	this.map = null;
 	for(var i in this.selectableMaps){
 		if(this.selectableMaps[i].id == map){
@@ -123,7 +132,7 @@ Room.prototype.startingRace = function(){
 	}
 
 	if(this.map == null){
-		this.map = game.maps[random(0, game.maps.length - 1)];
+		this.map = game.maps[random(0, game.maps.length)];
 	}
 
 
@@ -182,6 +191,7 @@ Room.prototype.endRace = function(){
 	var ranking = {};
 	ranking.drops = [];
 	ranking.players = [];
+	var _this = this;
 	for(var i in this.playingPlayers){
 		//DROPS
 		if(this.playingPlayers[i].registered && this.playingPlayers[i].time != null){
@@ -189,7 +199,14 @@ Room.prototype.endRace = function(){
 			if(this.playingPlayers[i].nbskintodrop > 0){
 				if(this.playingPlayers[i].skindropin <= 0){
 					//drop de skin
-					console.log("drop");
+					var skin = Drops.dropCommon();
+					var pPlayer = this.playingPlayers[i];
+					//console.log(skin);
+					MysqlManager.addUserSkin(this.playingPlayers[i], skin, function(){
+						MysqlManager.getUserSkins(_this.playingPlayers[i].id, function(res){
+							pPlayer.skins = res;
+						});
+					});
 					this.playingPlayers[i].nbskintodrop--;
 					this.playingPlayers[i].skindropin = randomNormalized(SKINS_DROP.n, SKINS_DROP.center, SKINS_DROP.bornes);
 				}else{

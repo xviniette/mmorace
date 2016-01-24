@@ -9,7 +9,8 @@ var Game = function(){
 Game.prototype.initMaps = function(){
 	_this = this;
 	MysqlManager.getMaps(function(res){
-		console.log("Chargement des maps : OK");
+		_this.maps = [];
+		//console.log("Chargement des maps : OK");
 		for(var i in res){
 			var m = new Map(res[i]);
 			m.parsing();
@@ -21,10 +22,9 @@ Game.prototype.initMaps = function(){
 Game.prototype.initSkins = function(){
 	_this = this;
 	MysqlManager.getSkins(function(res){
-		console.log("Chargement des skins : OK");
-		for(var i in res){
-			_this.skins.push(res[i]);
-		}
+		//console.log("Chargement des skins : OK");
+		Drops.skinsInfos = res;
+		Drops.initSkins();
 	});
 }
 

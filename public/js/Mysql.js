@@ -158,8 +158,26 @@ Mysql.prototype.getMaps = function(callback){
 //SKINS
 
 Mysql.prototype.getSkins = function(callback){
-	var requete = "SELECT * FROM skins;";
+	var requete = "SELECT * FROM skins ORDER BY rarity ASC;";
 	this.db.query(requete, function(e, r, f){
 		callback(r);
+	});
+}
+
+Mysql.prototype.getUserSkins = function(id, callback){
+	var requete = "SELECT *, us.id as id_us, id_s as id FROM skins s, userskin us WHERE s.id = us.id_s AND id_u = ?;";
+	this.db.query(requete, [id], function(e, r, f){
+		callback(r);
+	});
+}
+
+Mysql.prototype.addUserSkin = function(player, skin, callback){
+	var data = {
+		id_u:player.id,
+		id_s:skin.id,
+		soldPrice:0,
+	}
+	this.db.query("INSERT INTO userskin SET ?", data, function(e, r, f){
+		callback();
 	});
 }

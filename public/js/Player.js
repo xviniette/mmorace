@@ -30,6 +30,8 @@ var Player = function(json){
 
 	this.skin;
 
+	this.skins = [];
+
 	this.init(json);
 }
 
@@ -117,6 +119,15 @@ Player.prototype.clear = function(){
 	this.inputs = [];
 	this.nbInputs = 0;
 	this.nbInputsToExecute = 0;
+}
+
+Player.prototype.getSkin = function(id){
+	for(var i in this.skins){
+		if(this.skins[i].id_us == id){
+			return this.skins[i];
+		}
+	}
+	return null;
 }
 
 Player.prototype.getInit = function(){

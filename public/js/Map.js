@@ -29,6 +29,10 @@ var Map = function(json){
 		rotation:0
 	};
 
+	this.gold = 0;
+	this.silver = 0;
+	this.bronze = 0;
+
 	this.init(json);
 }
 

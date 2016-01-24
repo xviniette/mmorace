@@ -17,32 +17,36 @@ Utils.onLogin = function(data, socket){
 					Utils.onDisconnect({id:ptest.socket});
 					Utils.messageTo(ptest.socket, "login", true);
 				}
-				var d = {
-					id:res.id,
-					pseudo:res.pseudo,
-					socket:socket.id,
-					elo:res.elo,
-					xp:res.xp,
-					played:res.played,
-					registered:true,
-					nbskintodrop:res.nbskintodrop,
-					skindropin:res.skindropin,
-					nbcasetodrop:res.nbcasetodrop,
-					casedropin:res.casedropin
-				}
-				p = new Player(d);
 
-				game.addPlayer(p);
-				socket.emit("playerID", p.id);
-				var room = game.getAvailableRoom();
-				room.addPlayer(p);
+				MysqlManager.getUserSkins(res.id, function(resSkins){
+					var d = {
+						id:res.id,
+						pseudo:res.pseudo,
+						socket:socket.id,
+						elo:res.elo,
+						xp:res.xp,
+						played:res.played,
+						registered:true,
+						nbskintodrop:res.nbskintodrop,
+						skindropin:res.skindropin,
+						nbcasetodrop:res.nbcasetodrop,
+						casedropin:res.casedropin, 
+						skins:resSkins
+					}
+					p = new Player(d);
 
-				MysqlManager.updateUser({online:1, connection_time:Math.floor(Date.now()/1000)}, p.id, function(){});
+					game.addPlayer(p);
+					socket.emit("playerID", p.id);
+					var room = game.getAvailableRoom();
+					room.addPlayer(p);
+				});
+
+				MysqlManager.updateUser({online:1, connection_time:Math.floor(Date.now()/1000)}, res.id, function(){});
 			}else{
 				//mauvaise combinaison
 			}
 		});
-	}else{
+}else{
 		//Guest
 		if(data.login && isValidPseudo(data.login)){
 			var used = false;
@@ -132,7 +136,7 @@ Utils.onParticipate = function(data, socket){
 	var p = game.getPlayerBySocket(socket.id);
 	if(!p){return;}
 	if(p.room){
-		p.room.participate(p, data.map);
+		p.room.participate(p, data.map, 1);
 	}
 }
 

@@ -33,6 +33,7 @@ MysqlManager.everybodyOffline();
 eval(fs.readFileSync('./public/js/config.js')+'');
 eval(fs.readFileSync('./public/js/common.js')+'');
 eval(fs.readFileSync('./public/js/Elo.js')+'');
+eval(fs.readFileSync('./public/js/Drops.js')+'');
 eval(fs.readFileSync('./public/js/Game.js')+'');
 eval(fs.readFileSync('./public/js/Room.js')+'');
 eval(fs.readFileSync('./public/js/Map.js')+'');
@@ -103,11 +104,11 @@ game.initSkins();
 setInterval(function(){
 	game.update();
 }, 1000/FPS);
-/*
+
 setInterval(function(){
 	game.initMaps();
 	game.initSkins();
-}, 1000 * 60);*/
+}, 1000 * 60);
 
 io.on('connection', function(socket){
 	socket.emit("login", true);
