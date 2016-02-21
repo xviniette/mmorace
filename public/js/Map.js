@@ -22,7 +22,7 @@ var Map = function(json){
 		w:50,
 		h:50
 	}
-
+  
 	this.start = {
 		x:100, 
 		y:100,

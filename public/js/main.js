@@ -18,10 +18,8 @@ $(function(){
 		if(client){
 			client.update();
 		}
-
 		requestAnimationFrame(update);
 	}
-
 	requestAnimationFrame(update);
 });
 

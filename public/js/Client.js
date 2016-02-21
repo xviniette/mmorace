@@ -12,6 +12,7 @@ var Client = function(){
 	this.room;
 }
 
+
 Client.prototype.update = function(){
 	var now = Date.now();
 	var d = this.deltaTime * 1000;

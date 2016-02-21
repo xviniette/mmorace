@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='UTF-8' />
+	<title>MORACE</title>
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+	<canvas id="canvas" width="800" height="600"></canvas>
+
+	<script src="js/jquery.js"></script>
+
+	<script src="js/main.js"></script>
+	<script src="js/config.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/clientFunctions.js"></script>
+
+	<script src="js/Player.js"></script>
+	<script src="js/Map.js"></script>
+	<script src="js/Car.js"></script>
+	<script src="js/Room.js"></script>
+	<script src="js/Display.js"></script>
+	<script src="js/Client.js"></script>
+
+	<script>
+	$(function(){
+
+		var player = new Player();
+		player.car = new Car({player:player});
+		player.room = {};
+		player.room.map = new Map();
+
+		var keys = [];
+
+		document.body.addEventListener("keydown", function(e) {
+			if($('input:focus').length == 0){
+				for(var i in inputsKeyCode){
+					for(var j in inputsKeyCode[i]){
+						if(inputsKeyCode[i][j] == e.keyCode){
+							keys[i] = true;
+							return;
+						}
+					}
+				}
+			}
+		});
+
+		document.body.addEventListener("keyup", function(e) {
+			for(var i in inputsKeyCode){
+				for(var j in inputsKeyCode[i]){
+					if(inputsKeyCode[i][j] == e.keyCode){
+						keys[i] = false;
+						return;
+					}
+				}
+			}
+		});
+
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
+
+		var display = function(){
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			
+
+			var carData = player.getSnapshot();
+
+			var width = 100;
+
+			var center = {
+				x:carData.x - canvas.width/2,
+				y:carData.y - canvas.height/2
+			}
+
+
+			ctx.fillStyle = "#267F00";
+			ctx.fillRect(0, 0, canvas.width, canvas.height); 
+			ctx.fillStyle = "#3BC600";
+
+
+			ctx.save();
+			ctx.translate(-carData.x%width, -carData.y%width); 
+			for(var i = -2; i < Math.ceil(canvas.width/width) + 2; i++){
+				for(var j = -2; j < Math.ceil(canvas.height/width) + 2; j++){
+					if(i%2 == j%2){
+						ctx.fillRect(i*width, j*width, width, width);
+					}
+				}	
+			}
+			ctx.restore();
+
+
+
+			ctx.save();
+			ctx.translate(carData.x - center.x, carData.y - center.y); 
+			ctx.rotate(degtorad(carData.rotation)); 
+
+			ctx.fillStyle = "blue";
+			ctx.fillRect(-30, -20, 60, 40);
+
+
+
+			ctx.restore();
+		}
+
+		var fps = FPS;
+		var deltaTime = 1/fps;
+		var lastFrame = Date.now();
+
+		function update(timestamp) {
+			var now = Date.now();
+			var d = deltaTime * 1000;
+			while(now - lastFrame >= d){
+				player.inputs.push(keys);
+				player.update();
+				lastFrame += d;
+			}
+			requestAnimationFrame(update);
+			display();
+		}
+		requestAnimationFrame(update);
+
+	});
+</script>
+</body>
+</html>
