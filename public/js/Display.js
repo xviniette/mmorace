@@ -113,12 +113,9 @@ Display.prototype.displayCooldown = function(cd){
 }
 
 Display.prototype.displayLobbyPlayers = function(players){
-	var html = '<ul>';
-	for(var i in players){
-		html += '<li>'+players[i].pseudo+' ('+players[i].elo+')</li>';
-	}
-	html += '</ul>';
-	$("#lobbyPlayers").html(html);
+	var template = "{{#players}}<li>{{pseudo}} ({{elo}})</li>{{/players}}";
+	var rendered = Mustache.render(template, {players:players});
+  	$('#players').html(rendered);
 }
 
 Display.prototype.clearParticipatingPlayers = function(){
@@ -130,9 +127,7 @@ Display.prototype.addParticipatingPlayers = function(player, map){
 }
 
 Display.prototype.setSelectableMaps = function(maps){	
-	var html = '<option value="0">Random</option>';
-	for(var i in maps){
-		html += '<option value="'+maps[i].id+'">'+maps[i].name+'</option>';
-	}
-	$("#participate_map").html(html);
+	var template = "<option value='0'>Random</option>{{#maps}}<option value='{{id}}'>{{name}}</option>{{/maps}}";
+	var rendered = Mustache.render(template, {maps:maps});
+	$("#participate_map").html(rendered);
 }

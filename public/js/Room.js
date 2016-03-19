@@ -200,15 +200,16 @@ Room.prototype.endRace = function(){
 				if(this.playingPlayers[i].skindropin <= 0){
 					//drop de skin
 					var skin = Drops.dropCommon();
-					var pPlayer = this.playingPlayers[i];
-					//console.log(skin);
-					MysqlManager.addUserSkin(this.playingPlayers[i], skin, function(){
-						MysqlManager.getUserSkins(_this.playingPlayers[i].id, function(res){
-							pPlayer.skins = res;
+					if(skin != null){
+						var pPlayer = this.playingPlayers[i];
+						MysqlManager.addUserSkin(this.playingPlayers[i], skin, function(){
+							MysqlManager.getUserSkins(_this.playingPlayers[i].id, function(res){
+								pPlayer.skins = res;
+							});
 						});
-					});
-					this.playingPlayers[i].nbskintodrop--;
-					this.playingPlayers[i].skindropin = randomNormalized(SKINS_DROP.n, SKINS_DROP.center, SKINS_DROP.bornes);
+						this.playingPlayers[i].nbskintodrop--;
+						this.playingPlayers[i].skindropin = randomNormalized(SKINS_DROP.n, SKINS_DROP.center, SKINS_DROP.bornes);
+					}
 				}else{
 					//on décompte
 					this.playingPlayers[i].skindropin--;
@@ -218,9 +219,12 @@ Room.prototype.endRace = function(){
 			if(this.playingPlayers[i].nbcasetodrop > 0){
 				if(this.playingPlayers[i].casedropin <= 0){
 					//drop de caisse
-					console.log("drop");
-					this.playingPlayers[i].nbcasetodrop--;
-					this.playingPlayers[i].casedropin = randomNormalized(CASES_DROP.n, CASES_DROP.center, CASES_DROP.bornes);
+					var dropCase = Drops.dropCase();
+					if(dropCase != null){
+						MysqlManager.addUserCase(this.playingPlayers[i], dropCase);
+						this.playingPlayers[i].nbcasetodrop--;
+						this.playingPlayers[i].casedropin = randomNormalized(CASES_DROP.n, CASES_DROP.center, CASES_DROP.bornes);
+					}
 				}else{
 					//on décompte
 					this.playingPlayers[i].casedropin--;

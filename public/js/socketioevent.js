@@ -29,6 +29,11 @@ $(function(){
 			client.display.addParticipatingPlayers(client.room.playingPlayers[i], client.room.mapPoll[i]);
 		}
 		client.display.setSelectableMaps(client.room.selectableMaps);
+		if(data.startRace){
+			
+		}else{
+			
+		}
 	});
 
 	socket.on("update", function(data){

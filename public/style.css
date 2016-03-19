@@ -9,3 +9,7 @@ canvas{
 #roadCollision{
 	background-color: black;
 }
+
+.pannel{
+	display: none;
+}

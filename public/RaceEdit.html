@@ -7,7 +7,13 @@
 </head>
 <body>
 
-	<canvas id="canvas" width="800" height="600"></canvas>
+	<canvas id="canvas" width="1024" height="768"></canvas>
+	<canvas id="minimap" width="600" height="600"></canvas>
+	<canvas id="exportmap" width="600" height="600" hidden></canvas>
+
+	<button onclick="exportMap()">Export</button>
+
+	<img id="img" src="lol.png">
 
 	<script src="js/jquery.js"></script>
 
@@ -24,14 +30,32 @@
 	<script src="js/Client.js"></script>
 
 	<script>
+	var points = [];
+
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext("2d");
+
+	var minimap = document.querySelector("#minimap");
+	var ctxmini = minimap.getContext("2d");
+
+	var exportmap = document.querySelector("#exportmap");
+	var ctxexport = exportmap.getContext("2d");
+
 	$(function(){
+
+		Math.radians = function(degrees) {
+			return degrees * Math.PI / 180;
+		};
 
 		var player = new Player();
 		player.car = new Car({player:player});
+		player.car.x = player.car.y = 10000;
+		player.car.carDir = Math.radians(-90);
 		player.room = {};
 		player.room.map = new Map();
 
 		var keys = [];
+
 
 		document.body.addEventListener("keydown", function(e) {
 			if($('input:focus').length == 0){
@@ -57,15 +81,59 @@
 			}
 		});
 
-		var canvas = document.getElementById("canvas");
-		var ctx = canvas.getContext("2d");
+		var displayMinimap = function(){
+			ctxmini.clearRect(0, 0, minimap.width, minimap.height);
+
+			var limits = {
+				min:{
+					x:999999999,
+					y:999999999
+				},
+				max:{
+					x:-1,
+					y:-1
+				}
+			}
+
+			for(var i in points){
+				if(points[i].x < limits.min.x){
+					limits.min.x = points[i].x;
+				}
+				if(points[i].x > limits.max.x){
+					limits.max.x = points[i].x;
+				}
+
+				if(points[i].y < limits.min.y){
+					limits.min.y = points[i].y;
+				}
+				if(points[i].y > limits.max.y){
+					limits.max.y = points[i].y;
+				}
+			}
+
+
+			ctxmini.strokeStyle = "red";
+			ctxmini.beginPath();
+			for(var i in points){
+				var px = ((points[i].x - limits.min.x)/(limits.max.x - limits.min.x)) * minimap.width;
+				var py = ((points[i].y - limits.min.y)/(limits.max.y - limits.min.y)) * minimap.height;
+				if(i == 0){
+					ctxmini.moveTo(px,py);
+				}else{
+					ctxmini.lineTo(px,py);
+				}
+			}
+			ctxmini.stroke();
+		}
+
+		
 
 		var display = function(){
+
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			
-
 			var carData = player.getSnapshot();
+
 
 			var width = 100;
 
@@ -75,19 +143,25 @@
 			}
 
 
-			ctx.fillStyle = "#267F00";
+			ctx.fillStyle = "#3AC400";
 			ctx.fillRect(0, 0, canvas.width, canvas.height); 
-			ctx.fillStyle = "#3BC600";
+			ctx.fillStyle = "#37B700";
 
 
 			ctx.save();
 			ctx.translate(-carData.x%width, -carData.y%width); 
-			for(var i = -2; i < Math.ceil(canvas.width/width) + 2; i++){
-				for(var j = -2; j < Math.ceil(canvas.height/width) + 2; j++){
-					if(i%2 == j%2){
+
+			var nb = 0;
+			if((Math.floor(carData.x/width)%2 == 1 || Math.floor(carData.y/width)%2 == 1) && Math.floor(carData.y/width)%2 != Math.floor(carData.x/width)%2){
+				nb = 1;
+			}
+
+			for(var i = -1; i <= Math.ceil(canvas.width/width) + 1; i++){
+				for(var j = -1; j <= Math.ceil(canvas.height/width) + 1; j++){
+					if((i+j)%2 == nb){
 						ctx.fillRect(i*width, j*width, width, width);
 					}
-				}	
+				}
 			}
 			ctx.restore();
 
@@ -100,14 +174,37 @@
 			ctx.fillStyle = "blue";
 			ctx.fillRect(-30, -20, 60, 40);
 
-
-
 			ctx.restore();
+
+
+			ctx.strokeStyle = "red";
+			ctx.beginPath();
+			for(var i in points){
+				var px = points[i].x - carData.x + canvas.width/2;
+				var py = points[i].y - carData.y + canvas.height/2;
+				if(i == 0){
+					ctx.moveTo(px,py);
+				}else{
+					ctx.lineTo(px,py);
+				}
+			}
+			ctx.stroke();
 		}
 
 		var fps = FPS;
 		var deltaTime = 1/fps;
 		var lastFrame = Date.now();
+
+		function savePoints(){
+			var carData = player.getSnapshot();
+
+			points.push({
+				x:carData.x,
+				y:carData.y
+			});
+		}
+
+
 
 		function update(timestamp) {
 			var now = Date.now();
@@ -119,10 +216,61 @@
 			}
 			requestAnimationFrame(update);
 			display();
+			displayMinimap();
 		}
 		requestAnimationFrame(update);
+		setInterval(function(){
+			savePoints();
+		}, 100);
 
 	});
+
+function exportMap(){
+	var limits = {
+		min:{
+			x:999999999,
+			y:999999999
+		},
+		max:{
+			x:-1,
+			y:-1
+		}
+	}
+
+	for(var i in points){
+		if(points[i].x < limits.min.x){
+			limits.min.x = points[i].x;
+		}
+		if(points[i].x > limits.max.x){
+			limits.max.x = points[i].x;
+		}
+
+		if(points[i].y < limits.min.y){
+			limits.min.y = points[i].y;
+		}
+		if(points[i].y > limits.max.y){
+			limits.max.y = points[i].y;
+		}
+	}
+
+	exportmap.width = limits.max.x - limits.min.x + 1;
+	exportmap.height = limits.max.y - limits.min.y + 1;
+
+	ctxexport.strokeStyle = "red";
+	ctxexport.beginPath();
+	for(var i in points){
+		var px = points[i].x - limits.min.x;
+		var py = points[i].y - limits.min.y;
+		if(i == 0){
+			ctxexport.moveTo(px,py);
+		}else{
+			ctxexport.lineTo(px,py);
+		}
+	}
+	ctxexport.stroke();
+
+	document.querySelector("#img").src = exportmap.toDataURL("image/png");
+}
 </script>
 </body>
 </html>

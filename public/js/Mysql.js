@@ -165,7 +165,7 @@ Mysql.prototype.getSkins = function(callback){
 }
 
 Mysql.prototype.getUserSkins = function(id, callback){
-	var requete = "SELECT *, us.id as id_us, id_s as id FROM skins s, userskin us WHERE s.id = us.id_s AND id_u = ?;";
+	var requete = "SELECT *, us.id as id_us, id_s as id FROM skins s, userskin us WHERE s.id = us.id_s AND us.id_u = ?;";
 	this.db.query(requete, [id], function(e, r, f){
 		callback(r);
 	});
@@ -178,6 +178,25 @@ Mysql.prototype.addUserSkin = function(player, skin, callback){
 		soldPrice:0,
 	}
 	this.db.query("INSERT INTO userskin SET ?", data, function(e, r, f){
+		callback();
+	});
+}
+
+//CASES
+Mysql.prototype.getUserCases = function(id, callback){
+	var requete = "SELECT *, uc.id as id_uc, uc.id_c as id FROM cases c, usercase uc WHERE c.id = uc.id_c AND uc.id_u = ?;";
+	this.db.query(requete, [id], function(e, r, f){
+		callback(r);
+	});
+}
+
+Mysql.prototype.addUserCase = function(player, skin, callback){
+	var data = {
+		id_u:player.id,
+		id_c:skin.id,
+		soldPrice:0,
+	}
+	this.db.query("INSERT INTO usercase SET ?", data, function(e, r, f){
 		callback();
 	});
 }

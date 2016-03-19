@@ -2,54 +2,131 @@
 <html>
 <head>
 	<meta charset='UTF-8' />
-	<title>MORACE</title>
-	<link rel="stylesheet" href="style.css" />
+	<title>OnRace</title>
+	<link rel="stylesheet" href="css/home.css" />
+	<link rel="stylesheet" href="css/lobby.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="stylesheet" href="css/hint.base.min.css" />
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>	
-	<div id="ConnectionPanel">
-		Connexion
-		<form id="login">
-			<input type="text" palceholder="login" id="login_login">
-			<input type="text" palceholder="password" id="login_password">
-			<input type="submit" value="Connexion">
-		</form>
-		Inscription
-		<form id="signin">
-			<input type="text" palceholder="login" id="signin_login">
-			<input type="text" palceholder="password" id="signin_password">
-			<input type="submit" value="Inscription">
-		</form>
+	<div id="game" >
+		<!-- HOME -->
+		<div id="home" class="pure-g">
+			<div class="playerOnline pure-u-1"><span id="onlinePlayers">756</span> <i class="fa fa-user"></i></div>
+			<div class="pure-u-1">
+				<div class="l-box">
+					<img class="pure-img logo" src="img/site/logo.png" width="400">
+				</div>
+			</div>
+			<div class="pure-u-1-3">
+				<div class="l-box">
+					<div class="tabs">
+						<input type="radio" name="tabs" id="tab1" checked >
+						<label for="tab1" class="pure-u-1-2">
+							Connection
+						</label>
+						<input type="radio" name="tabs" id="tab2">
+						<label for="tab2" class="pure-u-1-2">
+							Registration
+						</label>
+						<div id="tab-content1" class="tab-content">
+							<form class="pure-form pure-g" id="login">
+								<input id="login_login" type="text" placeholder="Login" class="pure-input-1">
+								<input id="login_password" type="password" placeholder="Password" class="pure-input-1">
+								<button type="submit" class="pure-button pure-button-primary pure-input-1-2">Connection</button>
+								<button type="submit" class="pure-button pure-button-primary pure-input-1-2">Play as guest</button>
+							</form>
+						</div>
+						<div id="tab-content2" class="tab-content">
+							<form class="pure-form" id="signin">
+								<input id="signin_login" type="text" placeholder="Login" class="pure-input-1">
+								<input id="signin_password" type="password" placeholder="Password" class="pure-input-1">
+								<button type="submit" class="pure-button pure-button-primary pure-input-1">Registration</button>
+							</form>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="pure-u-2-3">
+				<div class="l-box description">
+					OnRace hj jshdf kljqshg klsjdfh gjhalzrhe jakhze rkjhalzher krhet ezr tuhezorith zlrhe tkljhdefpvhqpz oerh azher kaj hlezrahzleh rtg ezrbthj alhezl hezr kajhzel rkjahzrkjh athauihez azejrk ahzkerjh
+				</div>
+
+				<div class="l-box">
+					<!-- <iframe width="100%" height="370px" src="https://www.youtube.com/embed/xtqOzcm0pEM" frameborder="0" allowfullscreen></iframe> -->
+				</div>
+			</div>
+		</div>
+
+		<!-- LOBBY -->
+		<div id="lobby" class="pure-g">
+			<div class="pure-u-1-3">
+				<div class="l-box">
+					<form class="pure-form pure-form-stacked">
+						<select class="pure-input-1">
+							<option>Lobby #1</option>
+							<option>Lobby #2</option>
+							<option>Lobby #3</option>
+							<option>Lobby #4</option>
+							<option>Lobby #5</option>
+						</select>
+					</form>
+
+					<h2>41 joueurs</h2>
+
+					<ul>
+						<li><a href="#">ElBazia</a> <span class="elo" style="float:right">1850</span></li>
+						<li><a href="#">ElBazia</a> <span class="elo" style="float:right">1850</span></li>
+						<li><a href="#">ElBazia</a> <span class="elo" style="float:right">1850</span></li>
+						<li><a href="#">ElBazia</a> <span class="elo" style="float:right">1850</span></li>
+						<li><a href="#">ElBazia</a> <span class="elo" style="float:right">1850</span></li>
+					</ul>
+				</div>
+			</div>
+			<div class="pure-u-2-3">
+            <div class="l-box">
+                <div>
+                <input type="radio" name="radio" id="radio1" class="radio" checked/>
+                <label for="radio1">Random map</label>
+            </div>
+
+            <div>
+                <input type="radio" name="radio" id="radio2" class="radio"/>
+                <label for="radio2">Map 1</label>
+            </div>
+
+            <div>   
+                <input type="radio" name="radio" id="radio3" class="radio"/>
+                <label for="radio3">Map 2</label>
+            </div>
+
+            <div>   
+                <input type="radio" name="radio" id="radio4" class="radio"/>
+                <label for="radio4">Map 3</label>
+            </div>
+        </div>
+		</div>
 	</div>
 
-	<div id="lobby">
-		<div id="players"></div>
-		<form id="participate">
-			<select id="participate_map">
-			</select>
-			<input type="submit" value="Rejoindre">
-		</form>
-		<div id="participatingPlayers"></div>
-	</div>
-
-	<div id="race">
+	<div id="race" class="pannel" hidden>
 		<div id="cooldown"></div>
 		<canvas id="canvas" width="1000" height="1000"></canvas>
-		<canvas id="roadCollision" width="500" height="500"></canvas>
+		<canvas id="roadCollision" width="500" height="500" style="display:none"></canvas>
 		<div id="raceTimestamp"><div>
-		<div id="nblap"></div>
-		<canvas id="minimap"></canvas>
-		<div id="finish"></div>
-		<div id="ranking"></div>
-	<div>	
-
-	<div id="tchat">
-		<ul id="messages"></ul>
-		<div id="emoji"></div>
+			<div id="nblap"></div>
+			<canvas id="minimap" style="display:none"></canvas>
+			<div id="finish"></div>
+			<div id="ranking"></div>
+		</div>
 	</div>
 
-	<script src="js/socketio.js"></script>
-	<script src="js/jquery.js"></script>
-	<script src="mustache.min.js"></script>
+	<script src="js/lib/jquery.js"></script>
+	<script src="js/lib/socketio.js"></script>
+	<script src="js/lib/mustache.min.js"></script>
+	<script src="js/lib/superplaceholder.min.js"></script>
 
 	<script src="js/main.js"></script>
 	<script src="js/config.js"></script>

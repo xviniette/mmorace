@@ -14,9 +14,15 @@ var Drops = {
 		}
 	},
 	dropCommon:function(){
+		if(this.skins[0].length == 0){
+			return null;
+		}
 		return this.skins[0][random(0, this.skins[0].length)];
 	},
 	dropCase:function(){
+		if(this.cases.length == 0){
+			return null;
+		}
 		return this.cases[random(0, this.cases.length)];
 	}
 }

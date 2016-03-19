@@ -46,7 +46,7 @@ Map.prototype.isRoad = function(x, y){
 			return (p[0] == 255);	
 		}
 		return true;
-	}	
+	}
 }
 
 Map.prototype.pointInFinish = function(x, y){

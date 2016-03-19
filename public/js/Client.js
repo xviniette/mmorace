@@ -56,6 +56,9 @@ Client.prototype.initRoom = function(data){
 	this.room.players = [];
 	this.room.playingPlayers = [];
 
+	console.log(this.room);
+
+
 	if(data.map){
 		var m = new Map(data.map);
 		this.room.map = m;
@@ -66,6 +69,8 @@ Client.prototype.initRoom = function(data){
 		data.players[i].room = this.room;
 		this.room.players.push(new Player(data.players[i]));
 	}
+
+	this.display.displayLobbyPlayers(this.room.players);
 
 	for(var i in data.playingPlayers){
 		data.playingPlayers[i].room = this.room;

@@ -1,5 +1,4 @@
 $(function(){
-	loadEmoji(1, 18);
 	document.body.addEventListener("keydown", function(e) {
 		if($('input:focus').length == 0){
 			for(var i in inputsKeyCode){
@@ -54,5 +53,7 @@ $(function(){
 		socket.emit("participate", {map:$("#participate_map").val()});
 	});
 
-	
+	//OnResizeCalled();
+	//window.addEventListener("resize", OnResizeCalled, false);
+
 });
