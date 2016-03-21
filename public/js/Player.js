@@ -137,7 +137,8 @@ Player.prototype.getInit = function(){
 		elo:this.elo,
 		xp:this.xp,
 		played:this.played,
-		registered:this.registered
+		registered:this.registered,
+		skins:this.skins
 	}
 	if(this.car != null){
 		data.car = {

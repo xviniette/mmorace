@@ -13,6 +13,12 @@ var Drops = {
 			this.skins[s.chest].push(s);
 		}
 	},
+	getInitSkins:function(){
+		if(this.skins[-1].length == 0){
+			return null;
+		}
+		return this.skins[-1];
+	},
 	dropCommon:function(){
 		if(this.skins[0].length == 0){
 			return null;

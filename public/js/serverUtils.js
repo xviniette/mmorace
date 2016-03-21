@@ -31,7 +31,7 @@ Utils.onLogin = function(data, socket){
 						skindropin:res.skindropin,
 						nbcasetodrop:res.nbcasetodrop,
 						casedropin:res.casedropin, 
-						skins:resSkins
+						skins:resSkins.concat(Drops.getInitSkins())
 					}
 					p = new Player(d);
 
@@ -39,6 +39,7 @@ Utils.onLogin = function(data, socket){
 					socket.emit("playerID", p.id);
 					var room = game.getAvailableRoom();
 					room.addPlayer(p);
+					socket.emit("rooms", game.getRoomsList());
 				});
 
 				MysqlManager.updateUser({online:1, connection_time:Math.floor(Date.now()/1000)}, res.id, function(){});
@@ -62,14 +63,17 @@ Utils.onLogin = function(data, socket){
 					id:unPlayer.get() * -1,
 					pseudo:"*"+data.login,
 					socket:socket.id, 
-					registered:false
+					registered:false,
+					skins:Drops.getInitSkins()
 				};
+
 				p = new Player(d);
 
 				game.addPlayer(p);
 				socket.emit("playerID", p.id);
 				var room = game.getAvailableRoom();
 				room.addPlayer(p);
+				socket.emit("rooms", game.getRoomsList());
 			}
 		}else{
 			//pseudo non valide

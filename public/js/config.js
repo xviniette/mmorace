@@ -16,7 +16,6 @@ var STARTTIME = 2 * 1000;
 
 var NB_PROPOSITION_MAP = 3;
 
-
 //DROP CARAC
 var NB_SKINS_WEEK = 2;
 

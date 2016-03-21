@@ -53,7 +53,7 @@ $(function(){
 		socket.emit("participate", {map:$("#participate_map").val()});
 	});
 
-	//OnResizeCalled();
-	//window.addEventListener("resize", OnResizeCalled, false);
+	// OnResizeCalled();
+	// window.addEventListener("resize", OnResizeCalled, false);
 
 });

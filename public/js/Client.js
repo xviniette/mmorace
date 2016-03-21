@@ -58,7 +58,6 @@ Client.prototype.initRoom = function(data){
 
 	console.log(this.room);
 
-
 	if(data.map){
 		var m = new Map(data.map);
 		this.room.map = m;

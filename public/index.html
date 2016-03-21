@@ -14,7 +14,7 @@
 	<div id="game" >
 		<!-- HOME -->
 		<div id="home" class="pure-g">
-			<div class="playerOnline pure-u-1"><span id="onlinePlayers">756</span> <i class="fa fa-user"></i></div>
+			<div class="playerOnline pure-u-1"><span id="onlinePlayers"></span> <i class="fa fa-user"></i></div>
 			<div class="pure-u-1">
 				<div class="l-box">
 					<img class="pure-img logo" src="img/site/logo.png" width="400">
@@ -66,80 +66,58 @@
 			<div class="pure-u-1-3">
 				<div class="l-box">
 					<form class="pure-form pure-form-stacked">
-						<select class="pure-input-1">
-							<option>Lobby #1</option>
-							<option>Lobby #2</option>
-							<option>Lobby #3</option>
-							<option>Lobby #4</option>
-							<option>Lobby #5</option>
+						<select class="pure-input-1" id="rooms">
 						</select>
 					</form>
 
-					<h2>41 joueurs</h2>
+					<h2><span id="nbPlayersLobby">0</span> <i class="fa fa-user"></i></h2>
 
-					<ul>
-						<li><a href="#">ElBazia</a> <span class="elo" style="float:right">1850</span></li>
-						<li><a href="#">ElBazia</a> <span class="elo" style="float:right">1850</span></li>
-						<li><a href="#">ElBazia</a> <span class="elo" style="float:right">1850</span></li>
-						<li><a href="#">ElBazia</a> <span class="elo" style="float:right">1850</span></li>
-						<li><a href="#">ElBazia</a> <span class="elo" style="float:right">1850</span></li>
-					</ul>
+					<ul id="lobbyPlayers"></ul>
 				</div>
 			</div>
 			<div class="pure-u-2-3">
-            <div class="l-box">
-                <div>
-                <input type="radio" name="radio" id="radio1" class="radio" checked/>
-                <label for="radio1">Random map</label>
-            </div>
-
-            <div>
-                <input type="radio" name="radio" id="radio2" class="radio"/>
-                <label for="radio2">Map 1</label>
-            </div>
-
-            <div>   
-                <input type="radio" name="radio" id="radio3" class="radio"/>
-                <label for="radio3">Map 2</label>
-            </div>
-
-            <div>   
-                <input type="radio" name="radio" id="radio4" class="radio"/>
-                <label for="radio4">Map 3</label>
-            </div>
-        </div>
+				<form id="participate">
+					<h1>Choose map</h1>
+					<div class="l-box" id="maps"></div>
+					<h1>Choose skin</h1>
+					<div class="l-box" id="skins"></div>
+					<button type="submit" class="pure-button pure-button-primary pure-input-1">Participate</button>
+				</form>
+				<div class="l-box">
+					<canvas id="mappolls"></canvas>
+				</div>
+			</div>
 		</div>
-	</div>
 
-	<div id="race" class="pannel" hidden>
-		<div id="cooldown"></div>
-		<canvas id="canvas" width="1000" height="1000"></canvas>
-		<canvas id="roadCollision" width="500" height="500" style="display:none"></canvas>
-		<div id="raceTimestamp"><div>
-			<div id="nblap"></div>
-			<canvas id="minimap" style="display:none"></canvas>
-			<div id="finish"></div>
-			<div id="ranking"></div>
+		<div id="race" class="pannel" hidden>
+			<div id="cooldown"></div>
+			<canvas id="canvas" width="1000" height="1000"></canvas>
+			<canvas id="roadCollision" width="500" height="500" style="display:none"></canvas>
+			<div id="raceTimestamp"><div>
+				<div id="nblap"></div>
+				<canvas id="minimap" style="display:none"></canvas>
+				<div id="finish"></div>
+				<div id="ranking"></div>
+			</div>
 		</div>
-	</div>
 
-	<script src="js/lib/jquery.js"></script>
-	<script src="js/lib/socketio.js"></script>
-	<script src="js/lib/mustache.min.js"></script>
-	<script src="js/lib/superplaceholder.min.js"></script>
+		<script src="js/lib/jquery.js"></script>
+		<script src="js/lib/socketio.js"></script>
+		<script src="js/lib/mustache.min.js"></script>
+		<script src="js/lib/superplaceholder.min.js"></script>
 
-	<script src="js/main.js"></script>
-	<script src="js/config.js"></script>
-	<script src="js/common.js"></script>
-	<script src="js/socketioevent.js"></script>
-	<script src="js/userEvent.js"></script>
-	<script src="js/clientFunctions.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/common.js"></script>
+		<script src="js/socketioevent.js"></script>
+		<script src="js/userEvent.js"></script>
+		<script src="js/clientFunctions.js"></script>
 
-	<script src="js/Player.js"></script>
-	<script src="js/Map.js"></script>
-	<script src="js/Car.js"></script>
-	<script src="js/Room.js"></script>
-	<script src="js/Display.js"></script>
-	<script src="js/Client.js"></script>
-</body>
-</html>
+		<script src="js/Player.js"></script>
+		<script src="js/Map.js"></script>
+		<script src="js/Car.js"></script>
+		<script src="js/Room.js"></script>
+		<script src="js/Display.js"></script>
+		<script src="js/Client.js"></script>
+	</body>
+	</html>

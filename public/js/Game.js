@@ -98,7 +98,7 @@ Game.prototype.getRoomsList = function(){
 	}
 	var d = [];
 	for(var i in this.rooms){
-		d.push(this.rooms[i].getListInfo());
+		d.push(this.rooms[i].getQuickInfo());
 	}
 	return d;
 }

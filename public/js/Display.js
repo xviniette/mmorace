@@ -113,10 +113,18 @@ Display.prototype.displayCooldown = function(cd){
 }
 
 Display.prototype.displayLobbyPlayers = function(players){
-	var template = "{{#players}}<li>{{pseudo}} ({{elo}})</li>{{/players}}";
+	var template = '{{#players}}<li><a href="#">{{pseudo}}</a> <span class="elo" style="float:right">{{elo}}</span></li>{{/players}}';
 	var rendered = Mustache.render(template, {players:players});
-  	$('#players').html(rendered);
+  	$('#lobbyPlayers').html(rendered);
+  	$("#nbPlayersLobby").text(players.length);
 }
+
+Display.prototype.displayRooms = function(rooms){
+	var template = '{{#rooms}}<option value="{{id}}">Lobby #{{id}} ({{nbPlayer}} players)</option>{{/rooms}}';
+	var rendered = Mustache.render(template, {rooms:rooms});
+	$('#rooms').html(rendered);
+}
+
 
 Display.prototype.clearParticipatingPlayers = function(){
 	$("#participatingPlayers").html("");
@@ -127,7 +135,16 @@ Display.prototype.addParticipatingPlayers = function(player, map){
 }
 
 Display.prototype.setSelectableMaps = function(maps){	
-	var template = "<option value='0'>Random</option>{{#maps}}<option value='{{id}}'>{{name}}</option>{{/maps}}";
+	maps.unshift({id:0, name:"Random", checked:true});
+	console.log(maps);
+	var template = '{{#maps}}<div><input type="radio" name="map" value="{{id}}" id="map-{{id}}" class="radio" {{#checked}}checked{{/checked}}/><label for="map-{{id}}">{{name}}</label></div>{{/maps}}';
 	var rendered = Mustache.render(template, {maps:maps});
-	$("#participate_map").html(rendered);
+	$("#maps").html(rendered);
+}
+
+Display.prototype.setSelectableSkins = function(skins){	
+	skins[0].checked = true;
+	var template = '{{#skins}}<div><input type="radio" name="skin" value="{{id_us}}" id="skin-{{id_us}}" class="radio" {{#checked}}checked{{/checked}}/><label for="skin-{{id_us}}">{{name}}</label></div>{{/skins}}';
+	var rendered = Mustache.render(template, {skins:skins});
+	$("#skins").html(rendered);
 }

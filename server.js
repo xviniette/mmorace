@@ -45,8 +45,16 @@ eval(fs.readFileSync('./public/js/serverUtils.js')+'');
 //ROUTING
 app.get( '/user/:id' , function( req, res, next ) {
 	MysqlManager.getUserById(req.params.id, function(data){
+		if(data == null){
+			res.json(data);
+			return;
+		}
 		delete data.password;
 		delete data.email;
+		delete data.nbskintodrop;
+		delete data.skindropin;
+		delete data.nbcasetodrop;
+		delete data.casedropin;
 		res.json(data);
 	});
 });
@@ -58,6 +66,8 @@ app.get( '/race/:id' , function( req, res, next ) {
 				data.times = temps;
 				res.json(data);
 			});	
+		}else{
+			res.json(null);
 		}
 	});
 });

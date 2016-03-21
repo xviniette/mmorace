@@ -40,6 +40,8 @@
 /* FIN TABS*/
 
 #home{
+    display: none;
+    height: 100%;
     position: relative;
     z-index: 1000;
 }

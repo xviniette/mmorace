@@ -4,16 +4,22 @@ $(function(){
 	socket.on("login", function(data){
 		client.pID = null;
 		client.room = null;
-		$("#ConnectionPanel").show();
+		$("#home").show();
 	});
 
 	socket.on("playerID", function(data){
 		client.pID = data;
-		$("#ConnectionPanel").hide();
+		$("#home").hide();
+		$("#lobby").show();
 	});
 
 	socket.on("playersStats", function(data){
+		$("#onlinePlayers").text(data);
 	});
+
+	socket.on("rooms", function(data){
+		client.display.displayRooms(data);
+	})
 
 	socket.on("init", function(data){
 		if(data.endState != null){
@@ -24,11 +30,15 @@ $(function(){
 		}
 		client.initRoom(data);
 		client.display.displayLobbyPlayers(client.room.players);
-		client.display.clearParticipatingPlayers();
 		for(var i = 0; i < client.room.playingPlayers.length; i++){
-			client.display.addParticipatingPlayers(client.room.playingPlayers[i], client.room.mapPoll[i]);
 		}
 		client.display.setSelectableMaps(client.room.selectableMaps);
+
+		for(var i in client.room.players){
+			if(client.room.players[i].id == client.pID){
+				client.display.setSelectableSkins(client.room.players[i].skins);
+			}
+		}
 		if(data.startRace){
 			
 		}else{
@@ -71,6 +81,7 @@ $(function(){
 	});
 
 	socket.on("partipatingPlayer", function(data){
+		console.log(data);
 		data.player.room = client.room;
 		var p = new Player(data.player);
 		client.room.playingPlayers.push(p);

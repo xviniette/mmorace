@@ -1,0 +1,6 @@
+#lobby{
+    display: none;
+    height: 100%;
+    position: relative;
+    z-index: 500;
+}
