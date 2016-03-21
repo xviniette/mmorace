@@ -21,5 +21,11 @@ $(function(){
 		requestAnimationFrame(update);
 	}
 	requestAnimationFrame(update);
+
+	setInterval(function(){
+		if(client && client.room && client.room.startRace == null){
+			client.display.mapPoll();
+		}
+	}, 100);
 });
 

@@ -115,8 +115,8 @@ Display.prototype.displayCooldown = function(cd){
 Display.prototype.displayLobbyPlayers = function(players){
 	var template = '{{#players}}<li id="player-{{id}}"><a href="#">{{pseudo}}</a> <span class="elo" style="float:right">{{elo}}</span></li>{{/players}}';
 	var rendered = Mustache.render(template, {players:players});
-  	$('#lobbyPlayers').html(rendered);
-  	$("#nbPlayersLobby").text(players.length);
+	$('#lobbyPlayers').html(rendered);
+	$("#nbPlayersLobby").text(players.length);
 }
 
 Display.prototype.displayRooms = function(rooms){
@@ -152,7 +152,34 @@ Display.prototype.setSelectableSkins = function(skins){
 	$("#skins").html(rendered);
 }
 
-Display.prototype.mapPoll = function(maps){
-	
-	console.log(maps);
+Display.prototype.mapPoll = function(){
+	var colors = ["red", "blue", "green", "yellow", "orange"];
+	var canvasMap = document.getElementById("mappolls");
+	var ctxMapPoll = canvasMap.getContext("2d");
+	ctxMapPoll.clearRect(0, 0, canvasMap.width, canvasMap.height);
+	var sumMapPoll = {};
+	var polls = this.client.room.mapPoll;
+	var tot = 0;
+	var nb = 0;
+	for(var i in polls){
+		if(sumMapPoll[polls[i]]){
+			sumMapPoll[polls[i]].nb++;
+		}else{
+			sumMapPoll[polls[i]] = {
+				nb:1,
+				color:colors[nb]
+			};
+			nb++;
+		}
+		tot++;
+	}
+
+	var rotation = 0;
+	for(var i in sumMapPoll){
+		ctxMapPoll.beginPath();
+		ctxMapPoll.arc(canvasMap.width/2, canvasMap.height/2, 30, (2 * Math.PI) * rotation, (2 * Math.PI) * (sumMapPoll[i].nb/tot), false);
+		ctxMapPoll.fillStyle = sumMapPoll[i].color;
+		ctxMapPoll.fill();
+		rotation += sumMapPoll[i].nb/tot;
+	}
 }
