@@ -70,6 +70,8 @@ Room.prototype.getMaps = function(){
 }
 
 Room.prototype.participate = function(player, map, skin){
+	map = parseInt(map);
+	skin = parseInt(skin);
 	if(this.state == 0){
 		var alreadyIn = false;
 		for(var i in this.playingPlayers){

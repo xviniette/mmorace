@@ -4,3 +4,7 @@
     position: relative;
     z-index: 500;
 }
+
+.participating{
+    background-color: green;
+}

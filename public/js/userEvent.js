@@ -50,10 +50,10 @@ $(function(){
 	//Participer
 	$("#participate").submit(function(e){
 		e.preventDefault();
-		socket.emit("participate", {map:$("#participate_map").val()});
+		socket.emit("participate", {map:parseInt($('input[name=map]:checked', '#participate').val()), skin:parseInt($('input[name=skin]:checked', '#participate').val())});
 	});
 
-	// OnResizeCalled();
-	// window.addEventListener("resize", OnResizeCalled, false);
+	OnResizeCalled();
+	window.addEventListener("resize", OnResizeCalled, false);
 
 });

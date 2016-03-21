@@ -123,7 +123,7 @@ Player.prototype.clear = function(){
 
 Player.prototype.getSkin = function(id){
 	for(var i in this.skins){
-		if(this.skins[i].id_us == id){
+		if(this.skins[i].id == id){
 			return this.skins[i];
 		}
 	}

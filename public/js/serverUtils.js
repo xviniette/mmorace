@@ -140,7 +140,7 @@ Utils.onParticipate = function(data, socket){
 	var p = game.getPlayerBySocket(socket.id);
 	if(!p){return;}
 	if(p.room){
-		p.room.participate(p, data.map, 1);
+		p.room.participate(p, data.map, data.skin);
 	}
 }
 

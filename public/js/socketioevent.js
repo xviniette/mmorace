@@ -81,11 +81,11 @@ $(function(){
 	});
 
 	socket.on("partipatingPlayer", function(data){
-		console.log(data);
 		data.player.room = client.room;
 		var p = new Player(data.player);
 		client.room.playingPlayers.push(p);
 		client.room.mapPoll.push(data.map);
+		client.display.mapPoll(client.room.mapPoll);
 		client.display.addParticipatingPlayers(p, data.map);
 	});
 
