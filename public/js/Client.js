@@ -69,8 +69,6 @@ Client.prototype.initRoom = function(data){
 		this.room.players.push(new Player(data.players[i]));
 	}
 
-	this.display.displayLobbyPlayers(this.room.players);
-
 	for(var i in data.playingPlayers){
 		data.playingPlayers[i].room = this.room;
 		var pp = new Player(data.playingPlayers[i]);

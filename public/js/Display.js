@@ -112,8 +112,18 @@ Display.prototype.displayCooldown = function(cd){
 	}
 }
 
-Display.prototype.displayLobbyPlayers = function(players){
-	var template = '{{#players}}<li id="player-{{id}}"><a href="#">{{pseudo}}</a> <span class="elo" style="float:right">{{elo}}</span></li>{{/players}}';
+Display.prototype.displayLobbyPlayers = function(){
+	var players = this.client.room.players;
+	var playingPlayers = this.client.room.playingPlayers;
+	for(var i in players){
+		for(var j in playingPlayers){
+			if(players[i].id == playingPlayers[j].id){
+				players[i].playing = true;
+				break;
+			}
+		}
+	}
+	var template = '{{#players}}<li id="player-{{id}}" {{#playing}}class="participating"{{/playing}}><a href="#">{{pseudo}}</a> <span class="elo" style="float:right">{{elo}}</span></li>{{/players}}';
 	var rendered = Mustache.render(template, {players:players});
 	$('#lobbyPlayers').html(rendered);
 	$("#nbPlayersLobby").text(players.length);
@@ -125,9 +135,18 @@ Display.prototype.displayRooms = function(rooms){
 	$('#rooms').html(rendered);
 }
 
-
 Display.prototype.addParticipatingPlayers = function(player, map){
 	$("#player-"+player.id).addClass("participating");
+}
+
+Display.prototype.addPlayer = function(player){
+	var template = '<li id="player-{{id}}"><a href="#">{{pseudo}}</a> <span class="elo" style="float:right">{{elo}}</span></li>';
+	var rendered = Mustache.render(template, player);
+	$("#lobbyPlayers").append(rendered);
+}
+
+Display.prototype.deletePlayer = function(player){
+	$("#player-"+player.id).remove();
 }
 
 Display.prototype.setSelectableMaps = function(maps){	

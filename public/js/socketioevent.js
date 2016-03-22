@@ -29,9 +29,8 @@ $(function(){
 			data.startRace = Date.now() + data.startRace;
 		}
 		client.initRoom(data);
-		client.display.displayLobbyPlayers(client.room.players);
-		for(var i = 0; i < client.room.playingPlayers.length; i++){
-		}
+		client.display.displayLobbyPlayers();
+
 		client.display.setSelectableMaps(client.room.selectableMaps);
 
 		for(var i in client.room.players){
@@ -107,12 +106,14 @@ $(function(){
 	});
 
 	socket.on("newPlayer", function(data){
-		client.room.addPlayer(new Player(data));
-		client.display.displayLobbyPlayers(client.room.players);
+		var p = new Player(data);
+		client.room.addPlayer(p);
+		client.display.addPlayer(p);
 	});
 
 	socket.on("deletePlayer", function(data){
-		client.room.deletePlayer(new Player(data));
-		client.display.displayLobbyPlayers(client.room.players);
+		var p = new Player(data);
+		client.room.deletePlayer(p);
+		client.display.deletePlayer(p);
 	});
 });
