@@ -126,7 +126,13 @@ Display.prototype.displayLobbyPlayers = function(){
 	var template = '{{#players}}<li id="player-{{id}}" {{#playing}}class="participating"{{/playing}}><a href="#">{{pseudo}}</a> <span class="elo" style="float:right">{{elo}}</span></li>{{/players}}';
 	var rendered = Mustache.render(template, {players:players});
 	$('#lobbyPlayers').html(rendered);
-	$("#nbPlayersLobby").text(players.length);
+	this.displayNbLobbyPlayers();
+}
+
+Display.prototype.displayNbLobbyPlayers = function(){
+	if(this.client && this.client.room){
+		$("#nbPlayersLobby").text(this.client.room.players.length);
+	}
 }
 
 Display.prototype.displayRooms = function(rooms){
@@ -172,10 +178,23 @@ Display.prototype.setSelectableSkins = function(skins){
 }
 
 Display.prototype.mapPoll = function(){
-	var colors = ["red", "blue", "green", "yellow", "orange"];
 	var canvasMap = document.getElementById("mappolls");
 	var ctxMapPoll = canvasMap.getContext("2d");
 	ctxMapPoll.clearRect(0, 0, canvasMap.width, canvasMap.height);
+
+	var radius = 120;
+
+	ctxMapPoll.beginPath();
+	ctxMapPoll.arc(canvasMap.width/2, canvasMap.height/2, radius, 0, 2 * Math.PI, false);
+	ctxMapPoll.fillStyle = "#A0A0A0";
+	ctxMapPoll.fill();
+
+	if(!(this.client && this.client.room && this.client.room.mapPoll)){
+		return;
+	}
+
+	var colors = ["red", "blue", "green", "yellow", "orange"];
+	
 	var sumMapPoll = {};
 	var polls = this.client.room.mapPoll;
 	var tot = 0;
@@ -192,11 +211,14 @@ Display.prototype.mapPoll = function(){
 		}
 		tot++;
 	}
+	console.log(sumMapPoll);
 
 	var rotation = 0;
 	for(var i in sumMapPoll){
 		ctxMapPoll.beginPath();
-		ctxMapPoll.arc(canvasMap.width/2, canvasMap.height/2, 30, (2 * Math.PI) * rotation, (2 * Math.PI) * (sumMapPoll[i].nb/tot), false);
+		ctxMapPoll.moveTo(canvasMap.width/2, canvasMap.height/2);
+		ctxMapPoll.arc(canvasMap.width/2, canvasMap.height/2, radius, (2 * Math.PI) * rotation, (2 * Math.PI) * rotation + (2 * Math.PI) * (sumMapPoll[i].nb/tot), false);
+		ctxMapPoll.lineTo(canvasMap.width/2, canvasMap.height/2);
 		ctxMapPoll.fillStyle = sumMapPoll[i].color;
 		ctxMapPoll.fill();
 		rotation += sumMapPoll[i].nb/tot;

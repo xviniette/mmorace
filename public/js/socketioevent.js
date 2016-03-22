@@ -109,11 +109,13 @@ $(function(){
 		var p = new Player(data);
 		client.room.addPlayer(p);
 		client.display.addPlayer(p);
+		client.display.displayNbLobbyPlayers();
 	});
 
 	socket.on("deletePlayer", function(data){
 		var p = new Player(data);
 		client.room.deletePlayer(p);
 		client.display.deletePlayer(p);
+		client.display.displayNbLobbyPlayers();
 	});
 });
