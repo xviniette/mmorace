@@ -73,7 +73,7 @@ Mysql.prototype.getRanking = function(type, desc, min, max, callback){
 	});
 }
 
-//Race
+//RACE
 
 Mysql.prototype.addRace = function(mapid, callback){
 	var data = {

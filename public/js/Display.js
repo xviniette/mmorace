@@ -211,7 +211,6 @@ Display.prototype.mapPoll = function(){
 		}
 		tot++;
 	}
-	console.log(sumMapPoll);
 
 	var rotation = 0;
 	for(var i in sumMapPoll){
@@ -222,5 +221,29 @@ Display.prototype.mapPoll = function(){
 		ctxMapPoll.fillStyle = sumMapPoll[i].color;
 		ctxMapPoll.fill();
 		rotation += sumMapPoll[i].nb/tot;
+	}
+
+
+	ctxMapPoll.lineWidth = 15;
+
+	ctxMapPoll.strokeStyle = "black";
+	ctxMapPoll.beginPath();
+	ctxMapPoll.arc(canvasMap.width/2, canvasMap.height/2, radius, 0, 2*Math.PI);
+	ctxMapPoll.stroke();
+
+	if(this.client.room.endState != null){
+		ctxMapPoll.strokeStyle = "yellow";
+		ctxMapPoll.beginPath();
+		ctxMapPoll.arc(canvasMap.width/2, canvasMap.height/2, radius, -Math.PI/2, -Math.PI/2 + 2*Math.PI * ((this.client.room.endState - Date.now())/PREPARATIONTIME));
+		ctxMapPoll.stroke();
+	}
+
+	var fontsize = 60;
+
+	if(this.client.room.playingPlayers){
+		ctxMapPoll.font = fontsize+'pt Calibri';
+		ctxMapPoll.textAlign = "center";
+		ctxMapPoll.fillStyle = "black";
+		ctxMapPoll.fillText(this.client.room.playingPlayers.length, canvasMap.width/2, canvasMap.height/2 + fontsize/2);
 	}
 }

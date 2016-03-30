@@ -17,6 +17,7 @@ var STARTTIME = 10 * 1000;
 var NB_PROPOSITION_MAP = 3;
 
 //DROP CARAC
+//SKIN
 var NB_SKINS_WEEK = 2;
 
 var SKINS_DROP_INIT = {
@@ -31,6 +32,7 @@ var SKINS_DROP = {
 	bornes:5
 };
 
+//CASE
 var NB_CASES_WEEK = 2;
 
 var CASES_DROP_INIT = {
