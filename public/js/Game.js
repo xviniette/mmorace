@@ -10,7 +10,6 @@ Game.prototype.initMaps = function(){
 	_this = this;
 	MysqlManager.getMaps(function(res){
 		_this.maps = [];
-		//console.log("Chargement des maps : OK");
 		for(var i in res){
 			var m = new Map(res[i]);
 			m.parsing();
@@ -22,7 +21,6 @@ Game.prototype.initMaps = function(){
 Game.prototype.initSkins = function(){
 	_this = this;
 	MysqlManager.getSkins(function(res){
-		//console.log("Chargement des skins : OK");
 		Drops.skinsInfos = res;
 		Drops.initSkins();
 	});

@@ -4,13 +4,11 @@ $(function(){
 	socket.on("login", function(data){
 		client.pID = null;
 		client.room = null;
-		$("#home").show();
+		show("home");
 	});
 
 	socket.on("playerID", function(data){
 		client.pID = data;
-		$("#home").hide();
-		$("#lobby").show();
 	});
 
 	socket.on("playersStats", function(data){
@@ -22,57 +20,11 @@ $(function(){
 	})
 
 	socket.on("init", function(data){
-		if(data.endState != null){
-			data.endState = Date.now() + data.endState;
-		}
-		if(data.startRace != null){
-			data.startRace = Date.now() + data.startRace;
-		}
 		client.initRoom(data);
-		client.display.displayLobbyPlayers();
-
-		client.display.setSelectableMaps(client.room.selectableMaps);
-
-		for(var i in client.room.players){
-			if(client.room.players[i].id == client.pID){
-				client.display.setSelectableSkins(client.room.players[i].skins);
-			}
-		}
-		if(data.startRace){
-			
-		}else{
-			
-		}
 	});
 
 	socket.on("update", function(data){
-		if(data.endState != null){
-			data.endState = Date.now() + data.endState;
-		}
-		if(data.startRace != null){
-			data.startRace = Date.now() + data.startRace;
-		}
-
-		for(var i in data.playingPlayers){
-			data.playingPlayers[i].room = client.room;
-			data.playingPlayers[i] = new Player(data.playingPlayers[i]);
-			if(data.playingPlayers[i].car){
-				data.playingPlayers[i].car.player = data.playingPlayers[i];
-				data.playingPlayers[i].car = new Car(data.playingPlayers[i].car);
-			}
-			if(data.playingPlayers[i].skin){
-				client.display.loadSkin(data.playingPlayers[i].skin);
-			}
-		}
-
 		client.room.init(data);
-
-		if(data.map){
-			var m = new Map(data.map);
-			client.room.map = m;
-			client.display.loadMap(m);
-		}
-
 	});
 
 	socket.on("snapshot", function(data){

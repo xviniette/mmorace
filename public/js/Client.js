@@ -47,6 +47,8 @@ Client.prototype.updateDisplay = function(){
 		this.display.displayCooldown(this.room.endState);
 		if(this.room.state == 1){
 			this.display.render();
+		}else{
+			this.display.mapPoll();
 		}
 	}	
 }
@@ -57,6 +59,16 @@ Client.prototype.initRoom = function(data){
 	this.room.playingPlayers = [];
 
 	console.log(this.room);
+
+	if(data.endState != null){
+		data.endState = Date.now() + data.endState;
+	}
+	if(data.startRace != null){
+		data.startRace = Date.now() + data.startRace;
+	}
+
+	this.display.displayLobbyPlayers();
+	this.display.setSelectableMaps(client.room.selectableMaps);
 
 	if(data.map){
 		var m = new Map(data.map);
@@ -80,6 +92,24 @@ Client.prototype.initRoom = function(data){
 			this.display.loadSkin(data.playingPlayers[i].skin);
 		}
 		this.room.playingPlayers.push(pp);
+	}
+
+	for(var i in this.room.players){
+		if(this.room.players[i].id == this.pID){
+			this.display.setSelectableSkins(this.room.players[i].skins);
+		}
+	}
+
+	if(data.map){
+		var m = new Map(data.map);
+		this.room.map = m;
+		this.display.loadMap(m);
+	}
+
+	if(this.state == 1){
+		show("race");
+	}else{
+		show("lobby");
 	}
 }
 

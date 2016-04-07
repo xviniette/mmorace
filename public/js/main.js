@@ -21,9 +21,5 @@ $(function(){
 		requestAnimationFrame(update);
 	}
 	requestAnimationFrame(update);
-
-	setInterval(function(){
-		client.display.mapPoll();
-	}, 100);
 });
 

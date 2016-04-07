@@ -42,64 +42,9 @@ eval(fs.readFileSync('./public/js/Car.js')+'');
 eval(fs.readFileSync('./public/js/UniqueNumber.js')+'');
 eval(fs.readFileSync('./public/js/serverUtils.js')+'');
 
-//ROUTING
-app.get( '/user/:id' , function( req, res, next ) {
-	MysqlManager.getUserById(req.params.id, function(data){
-		if(data == null){
-			res.json(data);
-			return;
-		}
-		delete data.password;
-		delete data.email;
-		delete data.nbskintodrop;
-		delete data.skindropin;
-		delete data.nbcasetodrop;
-		delete data.casedropin;
-		res.json(data);
-	});
-});
 
-app.get( '/race/:id' , function( req, res, next ) {
-	MysqlManager.getRace(req.params.id, function(data){
-		if(data != null){
-			MysqlManager.getTemps(req.params.id, function(temps){
-				data.times = temps;
-				res.json(data);
-			});	
-		}else{
-			res.json(null);
-		}
-	});
-});
-
-app.get( '/map/:id/' , function( req, res, next ) {
-	MysqlManager.getMap(req.params.id, function(data){
-		res.json(data);
-	});
-});
-
-app.get( '/mapranking/:id/:min/:max' , function( req, res, next ) {
-	MysqlManager.getRankingMap(req.params.id, req.params.min, req.params.max, function(data){
-		res.json(data);
-	});
-});
-
-app.get( '/ranking/:type/:desc/:min/:max' , function( req, res, next ) {
-	MysqlManager.getRanking(req.params.type, req.params.desc, req.params.min, req.params.max, function(data){
-		res.json(data);
-	});
-});
-
-app.get('/',function(req, res){
-	res.sendFile(__dirname + '/public/index.html');
-});
-
-app.get( '/*' , function( req, res, next ) {
-	var file = req.params[0];
-	res.sendFile( __dirname + '/public/' + file );
-});
-
-
+eval(fs.readFileSync('./routing.js')+'');
+eval(fs.readFileSync('./socketEvents.js')+'');
 
 var unRoom = new UniqueNumber(1);
 var unPlayer = new UniqueNumber(1);
@@ -119,33 +64,3 @@ setInterval(function(){
 	game.initMaps();
 	game.initSkins();
 }, 1000 * 60);
-
-io.on('connection', function(socket){
-	socket.emit("login", true);
-	socket.emit("playersStats", game.getNbPlayers());
-
-	socket.on("signin", function(data){
-		Utils.onSignin(data, socket);
-	});
-
-	socket.on("login", function(data){
-		Utils.onLogin(data, socket);
-	});
-
-	socket.on("msg", function(data){
-		Utils.onMessage(data, socket);
-	});
-
-	socket.on("inputs", function(data){
-		Utils.onInputs(data, socket);
-	});
-
-	socket.on("participate", function(data){
-		Utils.onParticipate(data, socket);
-	});
-
-	socket.on("disconnect", function(){
-		Utils.onDisconnect(socket);
-	});
-});
-

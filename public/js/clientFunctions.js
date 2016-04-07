@@ -28,5 +28,20 @@ function htmlEntities(str) {
 
 
 function show(page){
-	
+	var debug = true;
+	if(debug){
+		return;
+	}
+	var pages = ["home", "lobby", "race", "ranking"];
+
+	for(var i in pages){
+		$("#"+pages).hide();
+	}
+
+	var toShow = function(element){
+		$("#"+element).show();
+	}
+
+	toShow(page);	
 }
+
