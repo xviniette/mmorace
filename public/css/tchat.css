@@ -1,0 +1,14 @@
+.tchat{
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 800;
+    width: 500px;
+    background-color: green;
+}
+
+#messages{
+    max-height: 400px;
+    overflow-y:auto;
+}
