@@ -5,6 +5,30 @@
     z-index: 400;
 }
 
+#ranking .ranking{
+    max-height: 90%;
+    overflow-y:auto;
+}
+
 #ranking table{
     margin: auto;
+    width: 100%;
+}
+
+#ranking .drops{
+    max-height: 90%;
+    overflow-y:auto;
+}
+
+#ranking .drop{
+    border-bottom: 1px solid black;
+}
+
+#ranking .drop .player{
+    text-align: center;
+}
+
+.backToLobby{
+    margin: auto;
+    margin-top: 20px;
 }
