@@ -32,16 +32,12 @@ function show(page){
 	if(debug){
 		return;
 	}
-	var pages = ["home", "lobby", "race", "ranking"];
 
-	for(var i in pages){
-		$("#"+pages).hide();
-	}
+	$(".page").hide();
 
 	var toShow = function(element){
 		$("#"+element).show();
 	}
-
 	toShow(page);	
 }
 

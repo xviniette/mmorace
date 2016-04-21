@@ -42,7 +42,7 @@
 #home{
     display: none;
     height: 100%;
-    position: relative;
+    position: absolute;
     z-index: 1000;
 }
 

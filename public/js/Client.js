@@ -67,15 +67,6 @@ Client.prototype.initRoom = function(data){
 		data.startRace = Date.now() + data.startRace;
 	}
 
-	this.display.displayLobbyPlayers();
-	this.display.setSelectableMaps(client.room.selectableMaps);
-
-	if(data.map){
-		var m = new Map(data.map);
-		this.room.map = m;
-		this.display.loadMap(m);
-	}
-
 	for(var i in data.players){
 		data.players[i].room = this.room;
 		this.room.players.push(new Player(data.players[i]));
@@ -105,6 +96,9 @@ Client.prototype.initRoom = function(data){
 		this.room.map = m;
 		this.display.loadMap(m);
 	}
+
+	this.display.displayLobbyPlayers();
+	this.display.setSelectableMaps(this.room.selectableMaps);
 
 	if(this.state == 1){
 		show("race");
